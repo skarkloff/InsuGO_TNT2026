@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InsuGO — Prototipo navegable</title>
+  <style>
+    /* ============================================
+       INSUGO — Prototipo de pantallas
+       Taller de Nuevas Tecnologías 2026
+       Skarkloff, Zapellini
+       ============================================ */
+
+    :root {
+      --verde: #1D9E75;
+      --verde-oscuro: #0F6E56;
+      --verde-claro: #EAF3DE;
+      --verde-texto: #173404;
+      --naranja: #D85A30;
+      --naranja-oscuro: #993C1D;
+      --naranja-claro: #FAECE7;
+      --ambar-claro: #FAEEDA;
+      --ambar-oscuro: #854F0B;
+      --ambar-texto: #412402;
+      --rojo: #E24B4A;
+      --rojo-oscuro: #791F1F;
+      --rojo-claro: #FCEBEB;
+      --rojo-texto: #501313;
+      --azul: #378ADD;
+      --azul-oscuro: #0C447C;
+      --gris-100: #F1EFE8;
+      --gris-200: #D3D1C7;
+      --gris-400: #888780;
+      --gris-600: #5F5E5A;
+      --gris-900: #2C2C2A;
+      --fondo: #F1EFE8;
+      --whatsapp: #25D366;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font);
+      background: var(--fondo);
+      color: var(--gris-900);
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .page-header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--gris-900);
+    }
+
+    .page-header p {
+      margin: 8px 0 0;
+      font-size: 15px;
+      color: var(--gris-600);
+    }
+
+    /* Tabs de navegación */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--gris-200);
+    }
+
+    .tab {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--gris-200);
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--gris-900);
+      transition: all 0.15s;
+    }
+
+    .tab:hover {
+      background: var(--gris-100);
+    }
+
+    .tab.active {
+      background: var(--verde);
+      color: white;
+      border-color: var(--verde);
+    }
+
+    /* Frame del teléfono */
+    .phone-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone {
+      width: 380px;
+      min-height: 760px;
+      background: white;
+      border-radius: 32px;
+      border: 1px solid var(--gris-200);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-bar {
+      height: 28px;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 18px;
+      font-size: 12px;
+      color: var(--gris-600);
+      flex-shrink: 0;
+    }
+
+    /* Pantallas */
+    .screen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Header de pantalla */
+    .header-bar {
+      background: var(--verde);
+      padding: 18px 16px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .header-bar .title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .back {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 26px;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-family: inherit;
+      line-height: 1;
+    }
+
+    .back:hover {
+      opacity: 0.8;
+    }
+
+    /* Body scrolleable */
+    .body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    /* Botones */
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--naranja);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--naranja-oscuro);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--naranja-oscuro);
+      border: 1.5px solid var(--naranja);
+    }
+
+    .btn-secondary:hover {
+      background: var(--naranja-claro);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--verde);
+      border: none;
+      font-weight: 500;
+    }
+
+    /* Inputs */
+    .input {
+      background: var(--gris-100);
+      border: 1px solid var(--gris-200);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 18px;
+      color: var(--gris-900);
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .input::placeholder {
+      color: var(--gris-400);
+    }
+
+    .input:focus {
+      outline: 3px solid var(--verde);
+      outline-offset: 1px;
+    }
+
+    .label {
+      display: block;
+      font-size: 16px;
+      color: var(--gris-900);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    /* Chips */
+    .chip {
+      padding: 12px 18px;
+      border-radius: 24px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1.5px solid var(--gris-200);
+      background: white;
+      color: var(--gris-600);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .chip:hover {
+      border-color: var(--verde);
+    }
+
+    .chip.active {
+      background: var(--verde);
+      color: white;
+      border-color: var(--verde);
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border: 1px solid #E8E4D6;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    /* Bottom navigation */
+    .bottom-nav {
+      background: white;
+      border-top: 1px solid var(--gris-200);
+      padding: 8px 8px 12px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .nav-item {
+      text-align: center;
+      padding: 8px 0;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .nav-item:hover {
+      opacity: 0.8;
+    }
+
+    .nav-icon {
+      width: 26px;
+      height: 26px;
+      margin: 0 auto 4px;
+      border: 2px solid var(--gris-400);
+    }
+
+    .nav-icon.square { border-radius: 6px; }
+    .nav-icon.circle { border-radius: 50%; }
+
+    .nav-icon.active-fill {
+      background: var(--verde);
+      border-color: var(--verde);
+    }
+
+    .nav-label {
+      margin: 0;
+      font-size: 13px;
+      color: var(--gris-600);
+    }
+
+    .nav-item.active .nav-label {
+      color: var(--verde);
+      font-weight: 500;
+    }
+
+    /* Teclado numérico */
+    .keypad {
+      background: #F8F6EE;
+      border-radius: 14px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .key {
+      background: var(--gris-100);
+      border: 1px solid var(--gris-200);
+      border-radius: 12px;
+      padding: 18px 0;
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--gris-900);
+      cursor: pointer;
+      text-align: center;
+      font-family: inherit;
+      transition: all 0.1s;
+    }
+
+    .key:hover {
+      background: #E8E4D6;
+    }
+
+    .key:active {
+      transform: scale(0.95);
+    }
+
+    /* Sliders */
+    input[type=range] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      background: var(--gris-200);
+      border-radius: 4px;
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--verde);
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    input[type=range]::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--verde);
+      cursor: pointer;
+      border: 3px solid white;
+    }
+
+    /* Barras de gráfico */
+    .bar { background: var(--verde); border-radius: 4px; }
+    .bar.warn { background: #BA7517; }
+    .bar.danger { background: var(--rojo); }
+
+    /* Footer */
+    .page-footer {
+      margin: 24px 0 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--gris-600);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 480px) {
+      .phone { width: 100%; border-radius: 0; box-shadow: none; border: none; }
+      .page { padding: 16px 0; }
+      .tabs { padding: 0 16px 20px; }
+      .page-header { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+
+    <header class="page-header">
+      <h1>InsuGO — Prototipo navegable</h1>
+      <p>Gestión integral y regionalizada para prediabetes y diabetes tipo 2 · TNT 2026</p>
+    </header>
+
+    <h2 class="sr-only">Prototipo navegable de InsuGO con 8 pantallas: login, perfil inicial, dashboard, registro de glucemia, registro de comidas, recomendaciones, historial semanal y compartir reporte</h2>
+
+    <!-- Tabs -->
+    <nav class="tabs" aria-label="Navegación entre pantallas del prototipo">
+      <button onclick="goTo('login')" id="tab-login" class="tab active">1. Login</button>
+      <button onclick="goTo('perfil')" id="tab-perfil" class="tab">2. Perfil inicial</button>
+      <button onclick="goTo('home')" id="tab-home" class="tab">3. Inicio</button>
+      <button onclick="goTo('glucosa')" id="tab-glucosa" class="tab">4. Anotar glucosa</button>
+      <button onclick="goTo('comida')" id="tab-comida" class="tab">5. Comida y movimiento</button>
+      <button onclick="goTo('consejos')" id="tab-consejos" class="tab">6. Consejos</button>
+      <button onclick="goTo('historial')" id="tab-historial" class="tab">7. Historial</button>
+      <button onclick="goTo('compartir')" id="tab-compartir" class="tab">8. Compartir reporte</button>
+    </nav>
+
+    <!-- Phone -->
+    <div class="phone-wrap">
+      <div class="phone">
+
+        <div class="status-bar">
+          <span>9:41</span>
+          <span>•••</span>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 1 — LOGIN -->
+        <!-- ============================================ -->
+        <section id="screen-login" class="screen active" aria-label="Pantalla de inicio de sesión">
+          <div style="background: var(--verde); padding: 36px 24px 28px; text-align: center; color: white;">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: white; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;">
+              <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--naranja);"></div>
+            </div>
+            <p style="margin: 0; font-size: 26px; font-weight: 500;">InsuGO</p>
+            <p style="margin: 6px 0 0; font-size: 16px; opacity: 0.95;">Tu compañero diario</p>
+          </div>
+
+          <div class="body">
+            <div>
+              <p style="margin: 0; font-size: 24px; font-weight: 500; color: var(--gris-900);">Hola, ingresá</p>
+              <p style="margin: 4px 0 0; font-size: 16px; color: var(--gris-600);">Bienvenido de vuelta</p>
+            </div>
+
+            <div>
+              <label class="label" for="login-user">Correo o DNI</label>
+              <input id="login-user" type="text" class="input" placeholder="tucorreo@ejemplo.com" />
+            </div>
+
+            <div>
+              <label class="label" for="login-pass">Contraseña</label>
+              <input id="login-pass" type="password" class="input" placeholder="••••••••" />
+            </div>
+
+            <button class="btn btn-primary" onclick="goTo('home')" style="margin-top: 8px;">Ingresar</button>
+
+            <div style="display: flex; align-items: center; gap: 12px; margin: 4px 0;">
+              <div style="flex: 1; height: 1px; background: var(--gris-200);"></div>
+              <span style="font-size: 14px; color: var(--gris-400);">o</span>
+              <div style="flex: 1; height: 1px; background: var(--gris-200);"></div>
+            </div>
+
+            <button onclick="goTo('home')" style="border: 1.5px solid var(--gris-200); background: white; border-radius: 12px; padding: 16px; font-size: 16px; color: var(--gris-900); display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; font-family: inherit;">
+              <div style="width: 22px; height: 22px; border-radius: 50%; background: #4285F4; color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center;">G</div>
+              Continuar con Google
+            </button>
+
+            <button class="btn btn-ghost" onclick="goTo('perfil')" style="margin-top: 8px;">¿Primera vez? Registrate</button>
+          </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- 2 — PERFIL INICIAL -->
+        <!-- ============================================ -->
+        <section id="screen-perfil" class="screen" aria-label="Pantalla de configuración inicial del perfil">
+          <div class="header-bar">
+            <button class="back" onclick="goTo('login')" aria-label="Volver">‹</button>
+            <p class="title">Configurá tu perfil</p>
+          </div>
+
+          <div class="body">
+
+            <div style="display: flex; gap: 6px;">
+              <div style="flex: 1; height: 6px; border-radius: 3px; background: var(--verde);"></div>
+              <div style="flex: 1; height: 6px; border-radius: 3px; background: var(--verde);"></div>
+              <div style="flex: 1; height: 6px; border-radius: 3px; background: var(--gris-200);"></div>
+            </div>
+            <p style="margin: 0; font-size: 14px; color: var(--gris-600);">Paso 2 de 3</p>
+
+            <div>
+              <p style="margin: 0; font-size: 22px; font-weight: 500; color: var(--gris-900);">Contanos sobre vos</p>
+              <p style="margin: 6px 0 0; font-size: 16px; color: var(--gris-600); line-height: 1.5;">Esto nos ayuda a darte consejos justos para vos.</p>
+            </div>
+
+            <div>
+              <label class="label" for="perfil-nombre">¿Cómo te llamás?</label>
+              <input id="perfil-nombre" type="text" class="input" placeholder="Luis" />
+            </div>
+
+            <div>
+              <label class="label">¿Qué te diagnosticaron?</label>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="chip active" onclick="pickSingle(this)" style="text-align: left; padding: 16px;">Diabetes tipo 2</button>
+                <button class="chip" onclick="pickSingle(this)" style="text-align: left; padding: 16px;">Prediabetes</button>
+              </div>
+            </div>
+
+            <div style="background: var(--verde-claro); border: 1px solid #C0DD97; border-radius: 14px; padding: 18px;">
+              <p style="margin: 0 0 6px; font-size: 17px; font-weight: 500; color: var(--verde-texto);">¿Activamos tu ubicación?</p>
+              <p style="margin: 0 0 14px; font-size: 15px; color: #27500A; line-height: 1.5;">Para darte consejos según el clima y los alimentos de tu zona.</p>
+              <div style="display: flex; gap: 10px;">
+                <button onclick="goTo('home')" style="flex: 1; background: var(--verde); color: white; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 500; cursor: pointer; font-family: inherit;">Sí, activar</button>
+                <button onclick="goTo('home')" style="flex: 1; background: white; color: var(--gris-600); border: 1px solid var(--gris-200); border-radius: 10px; padding: 14px; font-size: 16px; cursor: pointer; font-family: inherit;">Ahora no</button>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="goTo('home')">Continuar</button>
+          </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- 3 — INICIO / DASHBOARD -->
+        <!-- ============================================ -->
+        <section id="screen-home" class="screen" aria-label="Pantalla de inicio">
+          <div style="background: var(--verde); padding: 22px 20px 26px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <p style="margin: 0; font-size: 16px; opacity: 0.9;">Buen día</p>
+                <p style="margin: 2px 0 0; font-size: 26px; font-weight: 500;">Luis</p>
+              </div>
+              <div style="width: 46px; height: 46px; border-radius: 50%; background: var(--naranja); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 500;">L</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.18); border-radius: 10px; padding: 12px 14px; margin-top: 16px; font-size: 15px;">Trelew · 9°C · Viento 65 km/h</div>
+          </div>
+
+          <div class="body">
+
+            <div style="background: var(--verde-claro); border-radius: 16px; padding: 20px;">
+              <p style="margin: 0; font-size: 15px; color: #27500A; font-weight: 500;">Tu última glucemia</p>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 8px;">
+                <span style="font-size: 48px; font-weight: 500; color: var(--verde-texto); line-height: 1;">118</span>
+                <span style="font-size: 17px; color: #3B6D11;">mg/dL</span>
+              </div>
+              <p style="margin: 8px 0 0; font-size: 15px; color: #3B6D11;">Hoy 8:30 · En rango</p>
+            </div>
+
+            <p style="margin: 4px 0 0; font-size: 17px; font-weight: 500; color: var(--gris-900);">¿Qué querés hacer?</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <button onclick="goTo('glucosa')" style="background: var(--naranja); color: white; border: none; border-radius: 14px; padding: 22px 12px; cursor: pointer; font-family: inherit;">
+                <div style="width: 32px; height: 32px; margin: 0 auto 10px; border: 2.5px solid white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 500;">+</div>
+                <p style="margin: 0; font-size: 16px; font-weight: 500;">Anotar glucosa</p>
+              </button>
+              <button onclick="goTo('comida')" style="background: white; border: 1.5px solid var(--naranja); color: var(--naranja-oscuro); border-radius: 14px; padding: 22px 12px; cursor: pointer; font-family: inherit;">
+                <div style="width: 32px; height: 32px; margin: 0 auto 10px; border: 2.5px solid var(--naranja-oscuro); border-radius: 6px;"></div>
+                <p style="margin: 0; font-size: 16px; font-weight: 500;">Comida y movimiento</p>
+              </button>
+            </div>
+
+            <button onclick="goTo('consejos')" style="background: var(--ambar-claro); border: none; border-left: 5px solid #BA7517; border-radius: 0 14px 14px 0; padding: 16px; text-align: left; cursor: pointer; font-family: inherit; width: 100%;">
+              <p style="margin: 0 0 6px; font-size: 14px; color: var(--ambar-oscuro); font-weight: 500;">Consejo del día</p>
+              <p style="margin: 0; font-size: 17px; color: var(--ambar-texto); line-height: 1.4;">Hay viento fuerte. Mejor caminar adentro de casa.</p>
+            </button>
+
+            <button onclick="goTo('historial')" style="background: white; border: 1px solid var(--gris-200); border-radius: 14px; padding: 16px; text-align: left; cursor: pointer; font-family: inherit; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <p style="margin: 0; font-size: 16px; font-weight: 500; color: var(--gris-900);">Ver mi semana</p>
+                <p style="margin: 4px 0 0; font-size: 14px; color: var(--gris-600);">Promedio: 124 mg/dL</p>
+              </div>
+              <span style="font-size: 24px; color: var(--gris-600);">›</span>
+            </button>
+          </div>
+
+          <nav class="bottom-nav" aria-label="Navegación principal">
+            <button class="nav-item active" onclick="goTo('home')">
+              <div class="nav-icon square active-fill"></div>
+              <p class="nav-label">Inicio</p>
+            </button>
+            <button class="nav-item" onclick="goTo('glucosa')">
+              <div class="nav-icon circle"></div>
+              <p class="nav-label">Anotar</p>
+            </button>
+            <button class="nav-item" onclick="goTo('consejos')">
+              <div class="nav-icon square"></div>
+              <p class="nav-label">Consejos</p>
+            </button>
+            <button class="nav-item" onclick="goTo('historial')">
+              <div class="nav-icon"></div>
+              <p class="nav-label">Historial</p>
+            </button>
+          </nav>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- 4 — REGISTRO DE GLUCOSA -->
+        <!-- ============================================ -->
+        <section id="screen-glucosa" class="screen" aria-label="Pantalla de registro de glucosa">
+          <div class="header-bar">
+            <button class="back" onclick="goTo('home')" aria-label="Volver">‹</button>
+            <p class="title">Anotar glucosa</p>
+          </div>
+
+          <div class="body">
+
+            <div style="background: var(--verde-claro); border-radius: 16px; padding: 24px; text-align: center;">
+              <p style="margin: 0 0 8px; font-size: 15px; color: #27500A; font-weight: 500;">Tu medición</p>
+              <div style="display: flex; align-items: baseline; justify-content: center; gap: 8px;">
+                <span id="gluc-val" style="font-size: 56px; font-weight: 500; color: var(--verde-texto); line-height: 1;">118</span>
+                <span style="font-size: 18px; color: #3B6D11;">mg/dL</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="label">¿Cuándo te la mediste?</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button class="chip active" onclick="pickSingle(this)">En ayunas</button>
+                <button class="chip" onclick="pickSingle(this)">Después de comer</button>
+                <button class="chip" onclick="pickSingle(this)">Antes de dormir</button>
+                <button class="chip" onclick="pickSingle(this)">Otro</button>
+              </div>
+            </div>
+
+            <div class="keypad">
+              <button class="key" onclick="glucKey('1')">1</button>
+              <button class="key" onclick="glucKey('2')">2</button>
+              <button class="key" onclick="glucKey('3')">3</button>
+              <button class="key" onclick="glucKey('4')">4</button>
+              <button class="key" onclick="glucKey('5')">5</button>
+              <button class="key" onclick="glucKey('6')">6</button>
+              <button class="key" onclick="glucKey('7')">7</button>
+              <button class="key" onclick="glucKey('8')">8</button>
+              <button class="key" onclick="glucKey('9')">9</button>
+              <button class="key" onclick="glucClear()" style="color: var(--naranja-oscuro);" aria-label="Borrar todo">C</button>
+              <button class="key" onclick="glucKey('0')">0</button>
+              <button class="key" onclick="glucDel()" style="color: var(--gris-600);" aria-label="Borrar último dígito">‹</button>
+            </div>
+
+            <button class="btn btn-primary" onclick="goTo('home')">Guardar medición</button>
+          </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- 5 — COMIDA Y MOVIMIENTO -->
+        <!-- ============================================ -->
+        <section id="screen-comida" class="screen" aria-label="Pantalla de registro de comidas y actividad física">
+          <div class="header-bar">
+            <button class="back" onclick="goTo('home')" aria-label="Volver">‹</button>
+            <p class="title">Comida y movimiento</p>
+          </div>
+
+          <div class="body">
+
+            <p style="margin: 0; font-size: 17px; color: var(--gris-900); line-height: 1.5;">Anotá lo del día. No hace falta detalle, con frases cortas alcanza.</p>
+
+            <div>
+              <label class="label" for="meal-desayuno">Desayuno</label>
+              <input id="meal-desayuno" type="text" class="input" placeholder="Ej: mate con tostadas" />
+            </div>
+
+            <div>
+              <label class="label" for="meal-almuerzo">Almuerzo</label>
+              <input id="meal-almuerzo" type="text" class="input" placeholder="Ej: pollo con ensalada" />
+            </div>
+
+            <div>
+              <label class="label" for="meal-cena">Cena</label>
+              <input id="meal-cena" type="text" class="input" placeholder="Ej: tortilla de zapallitos" />
+            </div>
+
+            <div style="background: var(--verde-claro); border-radius: 14px; padding: 18px;">
+              <p style="margin: 0 0 12px; font-size: 17px; font-weight: 500; color: var(--verde-texto);">¿Te moviste hoy?</p>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px;">
+                <button class="chip active" onclick="pickSingle(this)">Caminar</button>
+                <button class="chip" onclick="pickSingle(this)">En casa</button>
+                <button class="chip" onclick="pickSingle(this)">Bici</button>
+              </div>
+              <p style="margin: 0 0 8px; font-size: 15px; color: #27500A;">Minutos: <span id="min-val" style="font-weight: 500; font-size: 18px;">30</span></p>
+              <input type="range" min="0" max="120" value="30" oninput="document.getElementById('min-val').textContent = this.value" aria-label="Minutos de actividad" />
+            </div>
+
+            <button class="btn btn-primary" onclick="goTo('home')">Guardar día</button>
+          </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- 6 — CONSEJOS -->
+        <!-- ============================================ -->
+        <section id="screen-consejos" class="screen" aria-label="Pantalla de consejos personalizados">
+          <div class="header-bar">
+            <button class="back" onclick="goTo('home')" aria-label="Volver">‹</button>
+            <p class="title">Consejos para hoy</p>
+          </div>
+
+          <div class="body" style="gap: 14px;">
+
+            <p style="margin: 0; font-size: 15px; color: var(--gris-600);">Trelew · 9°C · viento fuerte</p>
+
+            <div class="card" style="border-left: 5px solid #BA7517;">
+              <p style="margin: 0 0 6px; font-size: 14px; color: var(--ambar-oscuro); font-weight: 500;">Movimiento de hoy</p>
+              <p style="margin: 0 0 8px; font-size: 18px; font-weight: 500; color: var(--gris-900);">Mejor adentro</p>
+              <p style="margin: 0; font-size: 16px; color: var(--gris-900); line-height: 1.5;">Hay viento fuerte. Probá 20 minutos de estiramiento o caminar por la casa.</p>
+            </div>
+
+            <div class="card" style="border-left: 5px solid var(--verde);">
+              <p style="margin: 0 0 6px; font-size: 14px; color: var(--verde-oscuro); font-weight: 500;">Comida de la zona</p>
+              <p style="margin: 0 0 10px; font-size: 18px; font-weight: 500; color: var(--gris-900);">Frutos rojos en la feria</p>
+              <p style="margin: 0 0 12px; font-size: 16px; color: var(--gris-900); line-height: 1.5;">Calafate y rosa mosqueta están baratos esta semana. Bajos en azúcar y buenos para vos.</p>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <span style="background: var(--verde-claro); color: #27500A; padding: 6px 12px; border-radius: 16px; font-size: 14px;">Calafate</span>
+                <span style="background: var(--verde-claro); color: #27500A; padding: 6px 12px; border-radius: 16px; font-size: 14px;">Acelga</span>
+                <span style="background: var(--verde-claro); color: #27500A; padding: 6px 12px; border-radius: 16px; font-size: 14px;">Espinaca</span>
+              </div>
+            </div>
+
+            <div class="card" style="border-left: 5px solid var(--azul);">
+              <p style="margin: 0 0 6px; font-size: 14px; color: var(--azul-oscuro); font-weight: 500;">Cuidado de tus pies</p>
+              <p style="margin: 0 0 8px; font-size: 18px; font-weight: 500; color: var(--gris-900);">Revisión semanal</p>
+              <p style="margin: 0; font-size: 16px; color: var(--gris-900); line-height: 1.5;">Mirá si hay heridas, callos o piel seca. Después poné crema hidratante.</p>
+            </div>
+
+            <div class="card" style="border-left: 5px solid var(--rojo); background: var(--rojo-claro); border-color: var(--rojo-claro);">
+              <p style="margin: 0 0 6px; font-size: 14px; color: var(--rojo-oscuro); font-weight: 500;">Alerta en tu zona</p>
+              <p style="margin: 0 0 8px; font-size: 18px; font-weight: 500; color: var(--rojo-texto);">Brote de gripe en Trelew</p>
+              <p style="margin: 0; font-size: 16px; color: var(--rojo-texto); line-height: 1.5;">Lavate las manos seguido y evitá lugares cerrados con mucha gente.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- 7 — HISTORIAL -->
+        <!-- ============================================ -->
+        <section id="screen-historial" class="screen" aria-label="Pantalla de historial semanal de glucemia">
+          <div class="header-bar" style="justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button class="back" onclick="goTo('home')" aria-label="Volver">‹</button>
+              <p class="title">Tu semana</p>
+            </div>
+            <button onclick="goTo('compartir')" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit;">Compartir</button>
+          </div>
+
+          <div class="body" style="gap: 18px;">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div style="background: var(--verde-claro); border-radius: 12px; padding: 14px;">
+                <p style="margin: 0; font-size: 13px; color: #27500A;">Promedio</p>
+                <p style="margin: 4px 0 0; font-size: 26px; font-weight: 500; color: var(--verde-texto);">124</p>
+                <p style="margin: 2px 0 0; font-size: 12px; color: #3B6D11;">mg/dL</p>
+              </div>
+              <div style="background: var(--ambar-claro); border-radius: 12px; padding: 14px;">
+                <p style="margin: 0; font-size: 13px; color: var(--ambar-oscuro);">Mediciones</p>
+                <p style="margin: 4px 0 0; font-size: 26px; font-weight: 500; color: var(--ambar-texto);">12</p>
+                <p style="margin: 2px 0 0; font-size: 12px; color: var(--ambar-oscuro);">esta semana</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <p style="margin: 0 0 14px; font-size: 16px; font-weight: 500; color: var(--gris-900);">Glucemia diaria</p>
+
+              <div style="position: relative; height: 180px; margin-bottom: 8px;">
+                <div style="position: absolute; left: 0; right: 0; bottom: 30%; height: 1px; background: var(--gris-200);"></div>
+                <div style="position: absolute; left: 0; right: 0; bottom: 70%; height: 1px; background: var(--gris-200);"></div>
+                <div style="position: absolute; right: 0; bottom: 30%; font-size: 10px; color: var(--gris-400); transform: translateY(-50%); background: white; padding: 0 4px;">110</div>
+                <div style="position: absolute; right: 0; bottom: 70%; font-size: 10px; color: var(--gris-400); transform: translateY(-50%); background: white; padding: 0 4px;">160</div>
+
+                <div style="position: absolute; left: 0; right: 0; bottom: 0; top: 0; display: flex; align-items: flex-end; gap: 10px; padding: 0 4px;">
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center;"><div class="bar" style="width: 100%; height: 50%;"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center;"><div class="bar warn" style="width: 100%; height: 75%;"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center;"><div class="bar" style="width: 100%; height: 45%;"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center;"><div class="bar" style="width: 100%; height: 60%;"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center;"><div class="bar danger" style="width: 100%; height: 90%;"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center;"><div class="bar" style="width: 100%; height: 55%;"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center;"><div class="bar" style="width: 100%; height: 50%;"></div></div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 10px; padding: 0 4px;">
+                <p style="margin: 0; flex: 1; text-align: center; font-size: 13px; color: var(--gris-600);">L</p>
+                <p style="margin: 0; flex: 1; text-align: center; font-size: 13px; color: var(--gris-600);">M</p>
+                <p style="margin: 0; flex: 1; text-align: center; font-size: 13px; color: var(--gris-600);">M</p>
+                <p style="margin: 0; flex: 1; text-align: center; font-size: 13px; color: var(--gris-600);">J</p>
+                <p style="margin: 0; flex: 1; text-align: center; font-size: 13px; color: var(--gris-600);">V</p>
+                <p style="margin: 0; flex: 1; text-align: center; font-size: 13px; color: var(--gris-600);">S</p>
+                <p style="margin: 0; flex: 1; text-align: center; font-size: 13px; color: var(--gris-600);">D</p>
+              </div>
+
+              <div style="display: flex; gap: 14px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #E8E4D6; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <div style="width: 12px; height: 12px; background: var(--verde); border-radius: 2px;"></div>
+                  <span style="font-size: 13px; color: var(--gris-600);">En rango</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <div style="width: 12px; height: 12px; background: #BA7517; border-radius: 2px;"></div>
+                  <span style="font-size: 13px; color: var(--gris-600);">Atención</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <div style="width: 12px; height: 12px; background: var(--rojo); border-radius: 2px;"></div>
+                  <span style="font-size: 13px; color: var(--gris-600);">Alto</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="background: var(--ambar-claro); border: none;">
+              <p style="margin: 0 0 6px; font-size: 14px; font-weight: 500; color: var(--ambar-oscuro);">Lo que vimos</p>
+              <p style="margin: 0; font-size: 16px; color: var(--ambar-texto); line-height: 1.5;">El viernes tu glucosa subió. Ese día comiste pastas y no caminaste.</p>
+            </div>
+
+            <button class="btn btn-primary" onclick="goTo('compartir')">Compartir con mi médico</button>
+          </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- 8 — COMPARTIR REPORTE -->
+        <!-- ============================================ -->
+        <section id="screen-compartir" class="screen" aria-label="Pantalla de compartir reporte">
+          <div class="header-bar">
+            <button class="back" onclick="goTo('historial')" aria-label="Volver">‹</button>
+            <p class="title">Compartir reporte</p>
+          </div>
+
+          <div class="body" style="gap: 18px;">
+
+            <p style="margin: 0; font-size: 17px; color: var(--gris-900); line-height: 1.5;">Armamos un resumen de tu última semana para que se lo muestres a tu médico.</p>
+
+            <div style="background: white; border: 1px solid var(--gris-200); border-radius: 14px; padding: 18px;">
+              <div style="border-bottom: 1px solid #E8E4D6; padding-bottom: 12px; margin-bottom: 12px;">
+                <p style="margin: 0; font-size: 13px; color: var(--gris-600); letter-spacing: 0.5px;">REPORTE SEMANAL</p>
+                <p style="margin: 4px 0 0; font-size: 18px; font-weight: 500; color: var(--gris-900);">Luis · 12 al 18 de abril</p>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+                <div>
+                  <p style="margin: 0; font-size: 12px; color: var(--gris-600);">Promedio glucemia</p>
+                  <p style="margin: 2px 0 0; font-size: 20px; font-weight: 500; color: var(--gris-900);">124 mg/dL</p>
+                </div>
+                <div>
+                  <p style="margin: 0; font-size: 12px; color: var(--gris-600);">Mediciones</p>
+                  <p style="margin: 2px 0 0; font-size: 20px; font-weight: 500; color: var(--gris-900);">12</p>
+                </div>
+                <div>
+                  <p style="margin: 0; font-size: 12px; color: var(--gris-600);">Mín / Máx</p>
+                  <p style="margin: 2px 0 0; font-size: 16px; font-weight: 500; color: var(--gris-900);">98 / 178</p>
+                </div>
+                <div>
+                  <p style="margin: 0; font-size: 12px; color: var(--gris-600);">Min. movimiento</p>
+                  <p style="margin: 2px 0 0; font-size: 16px; font-weight: 500; color: var(--gris-900);">145</p>
+                </div>
+              </div>
+
+              <div style="background: #F8F6EE; border-radius: 8px; padding: 10px; display: flex; gap: 4px; align-items: flex-end; height: 60px;">
+                <div style="flex: 1; background: var(--verde); height: 50%; border-radius: 2px;"></div>
+                <div style="flex: 1; background: #BA7517; height: 75%; border-radius: 2px;"></div>
+                <div style="flex: 1; background: var(--verde); height: 45%; border-radius: 2px;"></div>
+                <div style="flex: 1; background: var(--verde); height: 60%; border-radius: 2px;"></div>
+                <div style="flex: 1; background: var(--rojo); height: 90%; border-radius: 2px;"></div>
+                <div style="flex: 1; background: var(--verde); height: 55%; border-radius: 2px;"></div>
+                <div style="flex: 1; background: var(--verde); height: 50%; border-radius: 2px;"></div>
+              </div>
+            </div>
+
+            <p style="margin: 4px 0 0; font-size: 17px; font-weight: 500; color: var(--gris-900);">¿Cómo querés compartirlo?</p>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <button onclick="goTo('historial')" style="background: var(--whatsapp); color: white; border: none; border-radius: 12px; padding: 18px; font-size: 17px; font-weight: 500; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <div style="width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.3);"></div>
+                Enviar por WhatsApp
+              </button>
+              <button onclick="goTo('historial')" style="background: white; color: var(--gris-900); border: 1.5px solid var(--gris-200); border-radius: 12px; padding: 18px; font-size: 17px; font-weight: 500; cursor: pointer; font-family: inherit;">Descargar PDF</button>
+              <button onclick="goTo('historial')" style="background: white; color: var(--gris-900); border: 1.5px solid var(--gris-200); border-radius: 12px; padding: 18px; font-size: 17px; font-weight: 500; cursor: pointer; font-family: inherit;">Mostrar en pantalla</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <p class="page-footer">Tocá las pestañas de arriba o los botones de la app para navegar entre pantallas</p>
+
+  </div>
+
+  <script>
+    /* ============================================
+       Navegación entre pantallas
+       ============================================ */
+    function goTo(id) {
+      document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+      var target = document.getElementById('screen-' + id);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+      var tab = document.getElementById('tab-' + id);
+      if (tab) tab.classList.add('active');
+
+      // Reset scroll
+      var body = target ? target.querySelector('.body') : null;
+      if (body) body.scrollTop = 0;
+    }
+
+    /* ============================================
+       Teclado numérico de glucemia
+       ============================================ */
+    var glucDirty = false;
+
+    function glucKey(d) {
+      var el = document.getElementById('gluc-val');
+      var v = el.textContent;
+      if (!glucDirty) { v = ''; glucDirty = true; }
+      if (v === '0') v = '';
+      if (v.length < 3) v += d;
+      el.textContent = v || '0';
+    }
+
+    function glucDel() {
+      var el = document.getElementById('gluc-val');
+      glucDirty = true;
+      var v = el.textContent.slice(0, -1);
+      el.textContent = v || '0';
+    }
+
+    function glucClear() {
+      glucDirty = true;
+      document.getElementById('gluc-val').textContent = '0';
+    }
+
+    /* ============================================
+       Selección de chips (single-select por grupo)
+       ============================================ */
+    function pickSingle(btn) {
+      var siblings = btn.parentElement.querySelectorAll('.chip');
+      siblings.forEach(function(c) { c.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
