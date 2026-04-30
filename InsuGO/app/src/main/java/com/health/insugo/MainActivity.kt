@@ -1,47 +1,30 @@
 package com.health.insugo
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.health.insugo.ui.theme.InsuGOTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commit
+import com.health.insugo.databinding.ActivityMainBinding
 
-class MainActivity : ComponentActivity() {
+// Heredamos de AppCompatActivity para soporte de Fragments clásicos [cite: 46]
+class MainActivity : AppCompatActivity() {
+
+    // Declaramos el binding para acceso seguro a las vistas [cite: 47]
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            InsuGOTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
+        // Inflamos la vista usando ViewBinding (Chau findViewById) [cite: 48]
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Cargamos el LoginFragment dinámicamente si es la primera vez [cite: 83-86]
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                // R.id.fragmentContainer es el ID de tu FragmentContainerView en activity_main.xml [cite: 74]
+                add(R.id.fragmentContainer, LoginFragment())
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    InsuGOTheme {
-        Greeting("Android")
     }
 }

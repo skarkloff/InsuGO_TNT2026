@@ -21,6 +21,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -35,7 +36,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
-        compose = true
+        //compose = true
+        viewBinding = true
     }
 }
 
@@ -55,4 +57,12 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation("androidx.core:core-ktx:1.12.0") // O la versión libs.androidx.core.ktx
+    implementation("androidx.appcompat:appcompat:1.7.1") // Fundamental para AppCompatActivity
+    implementation("androidx.fragment:fragment-ktx:1.8.9") // Permite usar 'supportFragmentManager.commit'
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0") // Para el ListaViewModel
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0") // Para usar lifecycleScope.launch
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
