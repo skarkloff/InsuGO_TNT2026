@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:orientation="vertical">
+
+    <!-- HEADER BAR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/verde"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnVolver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:stateListAnimator="@null"
+            android:text="‹"
+            android:textColor="@color/white"
+            android:textSize="26sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Acerca de InsuGO"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- LOGO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="0dp">
+
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center">
+
+                    <View
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/bg_circle_verde" />
+
+                    <View
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_circle_naranja" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:text="InsuGO"
+                    android:textColor="@color/gris_900"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="Tu compañero digital para el manejo de la prediabetes y la diabetes tipo 2"
+                    android:textColor="@color/gris_600"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- QUE ES -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_card"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="12dp"
+                    android:background="@color/verde" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¿Qué es InsuGO?"
+                        android:textColor="@color/verde_oscuro"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="InsuGO es una aplicación diseñada para ayudarte a llevar un registro diario de tu glucemia, recibir consejos personalizados y compartir información con tu equipo de salud."
+                        android:textColor="@color/gris_900"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="¿Qué podés hacer?"
+                android:textColor="@color/gris_900"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <!-- FEATURE 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <FrameLayout
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_card_naranja">
+
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:alpha="0.5"
+                        android:background="@drawable/bg_circle_naranja" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Registrar glucosa"
+                        android:textColor="@color/gris_900"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Anotá tus mediciones de glucemia fácilmente y seguí tu evolución día a día."
+                        android:textColor="@color/gris_600"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- FEATURE 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <FrameLayout
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_card_verde" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Consejos personalizados"
+                        android:textColor="@color/gris_900"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Recibí recomendaciones adaptadas a tu contexto, el clima y tu historial de salud."
+                        android:textColor="@color/gris_600"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- FEATURE 3 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <FrameLayout
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_card_ambar" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Compartir con tu médico"
+                        android:textColor="@color/gris_900"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Generá un resumen de tu historial para llevar a tu próxima consulta médica."
+                        android:textColor="@color/gris_600"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ENFOQUE REGIONAL -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_card_verde"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enfoque regional"
+                    android:textColor="@color/verde_oscuro"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="InsuGO fue pensado para la Patagonia argentina, teniendo en cuenta el clima, los hábitos y las condiciones locales para ofrecerte consejos más relevantes y útiles."
+                    android:textColor="#27500A"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- AVISO IMPORTANTE -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_card_rojo"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Importante"
+                    android:textColor="@color/rojo"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="InsuGO no reemplaza la consulta médica. Siempre consultá con tu médico o equipo de salud ante cualquier duda o cambio en tu condición."
+                    android:textColor="@color/gris_900"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

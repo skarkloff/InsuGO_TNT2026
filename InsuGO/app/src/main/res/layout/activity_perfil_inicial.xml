@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:orientation="vertical">
+
+    <!-- HEADER BAR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/verde"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnVolver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:stateListAnimator="@null"
+            android:text="‹"
+            android:textColor="@color/white"
+            android:textSize="26sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Configurá tu perfil"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- PROGRESS BAR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_progress_on" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_progress_on" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_progress_off" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Paso 2 de 3"
+                android:textColor="@color/gris_600"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Contanos sobre vos"
+                android:textColor="@color/gris_900"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Esto nos ayuda a darte consejos justos para vos."
+                android:textColor="@color/gris_600"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="¿Cómo te llamás?"
+                android:textColor="@color/gris_900"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input"
+                android:hint="Luis"
+                android:padding="16dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="¿Qué te diagnosticaron?"
+                android:textColor="@color/gris_900"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/chipDiabetes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_chip_on"
+                    android:gravity="center_vertical|start"
+                    android:padding="16dp"
+                    android:stateListAnimator="@null"
+                    android:text="Diabetes tipo 2"
+                    android:textColor="@color/verde_texto"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/chipPre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_chip_off"
+                    android:gravity="center_vertical|start"
+                    android:padding="16dp"
+                    android:stateListAnimator="@null"
+                    android:text="Prediabetes"
+                    android:textColor="@color/gris_600"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <!-- CARD UBICACION -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_card_verde"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¿Activamos tu ubicación?"
+                    android:textColor="@color/verde_texto"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Con tu ubicación podemos darte consejos basados en el clima y el entorno donde vivís."
+                    android:textColor="#27500A"
+                    android:textSize="15sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnSiActivar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_btn_primary"
+                        android:stateListAnimator="@null"
+                        android:text="Sí, activar"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <Button
+                        android:id="@+id/btnAhoraNo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_btn_white_gris"
+                        android:stateListAnimator="@null"
+                        android:text="Ahora no"
+                        android:textColor="@color/gris_600"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnContinuar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_btn_primary"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:stateListAnimator="@null"
+                android:text="Continuar"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

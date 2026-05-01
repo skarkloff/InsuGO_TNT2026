@@ -7,4 +7,24 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- InsuGO palette -->
+    <color name="verde">#1D9E75</color>
+    <color name="verde_oscuro">#0F6E56</color>
+    <color name="verde_claro">#EAF3DE</color>
+    <color name="verde_texto">#173404</color>
+    <color name="naranja">#D85A30</color>
+    <color name="naranja_oscuro">#993C1D</color>
+    <color name="naranja_claro">#FAECE7</color>
+    <color name="ambar_claro">#FAEEDA</color>
+    <color name="ambar_oscuro">#854F0B</color>
+    <color name="ambar_texto">#412402</color>
+    <color name="rojo">#E24B4A</color>
+    <color name="rojo_claro">#FCEBEB</color>
+    <color name="gris_100">#F1EFE8</color>
+    <color name="gris_200">#D3D1C7</color>
+    <color name="gris_400">#888780</color>
+    <color name="gris_600">#5F5E5A</color>
+    <color name="gris_900">#2C2C2A</color>
+    <color name="fondo">#F1EFE8</color>
 </resources>

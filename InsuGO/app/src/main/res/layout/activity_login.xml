@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- HEADER verde -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/verde"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingStart="36dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="36dp"
+            android:paddingBottom="32dp">
+
+            <FrameLayout
+                android:layout_width="72dp"
+                android:layout_height="72dp">
+
+                <View
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:background="@drawable/bg_circle_white" />
+
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_circle_naranja" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="InsuGO"
+                android:textColor="@color/white"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:alpha="0.95"
+                android:text="Tu compañero diario"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- BODY -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hola, ingresá"
+                android:textColor="@color/gris_900"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Bienvenido de vuelta"
+                android:textColor="@color/gris_600"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Correo o DNI"
+                android:textColor="@color/gris_900"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input"
+                android:inputType="textEmailAddress"
+                android:padding="16dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Contraseña"
+                android:textColor="@color/gris_900"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input"
+                android:inputType="textPassword"
+                android:padding="16dp"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btnIngresar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_btn_primary"
+                android:paddingTop="18dp"
+                android:paddingBottom="18dp"
+                android:stateListAnimator="@null"
+                android:text="Ingresar"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <!-- DIVIDER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/gris_200" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="o"
+                    android:textColor="@color/gris_400"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/gris_200" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnGoogle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_btn_google"
+                android:stateListAnimator="@null"
+                android:text="Continuar con Google"
+                android:textColor="@color/gris_900"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnRegistrate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:stateListAnimator="@null"
+                android:text="¿Primera vez? Registrate"
+                android:textColor="@color/verde"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

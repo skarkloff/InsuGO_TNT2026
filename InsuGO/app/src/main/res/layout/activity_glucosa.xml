@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:orientation="vertical">
+
+    <!-- HEADER BAR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/verde"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnVolver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:stateListAnimator="@null"
+            android:text="‹"
+            android:textColor="@color/white"
+            android:textSize="26sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Anotar glucosa"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- CARD VALOR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_verde"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tu medición"
+                    android:textColor="#27500A"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvGlucVal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textColor="@color/verde_texto"
+                        android:textSize="56sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="mg/dL"
+                        android:textColor="#3B6D11"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- CHIPS MOMENTO -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="¿Cuándo te la mediste?"
+                android:textColor="@color/gris_900"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/chipAyunas"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_chip_on"
+                        android:stateListAnimator="@null"
+                        android:text="En ayunas"
+                        android:textColor="@color/verde_texto"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/chipPostComida"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_chip_off"
+                        android:stateListAnimator="@null"
+                        android:text="Después de comer"
+                        android:textColor="@color/gris_600"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/chipDormir"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_chip_off"
+                        android:stateListAnimator="@null"
+                        android:text="Antes de dormir"
+                        android:textColor="@color/gris_600"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/chipOtro"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_chip_off"
+                        android:stateListAnimator="@null"
+                        android:text="Otro"
+                        android:textColor="@color/gris_600"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- KEYPAD -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:columnCount="3"
+                android:rowCount="4"
+                android:useDefaultMargins="false">
+
+                <Button
+                    android:id="@+id/key1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="1"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/key2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="2"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/key3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="3"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/key4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="4"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/key5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="5"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/key6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="6"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/key7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="7"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/key8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="8"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/key9"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="9"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/keyC"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="C"
+                    android:textColor="@color/naranja_oscuro"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/key0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="0"
+                    android:textColor="@color/gris_900"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/keyDel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/bg_key"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="‹"
+                    android:textColor="@color/gris_600"
+                    android:textSize="26sp" />
+            </GridLayout>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_btn_primary"
+                android:paddingTop="18dp"
+                android:paddingBottom="18dp"
+                android:stateListAnimator="@null"
+                android:text="Guardar medición"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
