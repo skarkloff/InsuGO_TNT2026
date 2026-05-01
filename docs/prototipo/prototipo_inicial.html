@@ -462,6 +462,7 @@
       <button onclick="goTo('consejos')" id="tab-consejos" class="tab">6. Consejos</button>
       <button onclick="goTo('historial')" id="tab-historial" class="tab">7. Historial</button>
       <button onclick="goTo('compartir')" id="tab-compartir" class="tab">8. Compartir reporte</button>
+      <button onclick="goTo('acerca')" id="tab-acerca" class="tab">9. Acerca de</button>
     </nav>
 
     <!-- Phone -->
@@ -916,6 +917,80 @@
               <button onclick="goTo('historial')" style="background: white; color: var(--gris-900); border: 1.5px solid var(--gris-200); border-radius: 12px; padding: 18px; font-size: 17px; font-weight: 500; cursor: pointer; font-family: inherit;">Descargar PDF</button>
               <button onclick="goTo('historial')" style="background: white; color: var(--gris-900); border: 1.5px solid var(--gris-200); border-radius: 12px; padding: 18px; font-size: 17px; font-weight: 500; cursor: pointer; font-family: inherit;">Mostrar en pantalla</button>
             </div>
+          </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- 9 — ACERCA DE -->
+        <!-- ============================================ -->
+        <section id="screen-acerca" class="screen" aria-label="Pantalla de información sobre InsuGO">
+          <div class="header-bar">
+            <button class="back" onclick="goTo('home')" aria-label="Volver">‹</button>
+            <p class="title">Acerca de InsuGO</p>
+          </div>
+
+          <div class="body" style="gap: 20px;">
+
+            <div style="text-align: center; padding: 8px 0 4px;">
+              <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--verde); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--naranja);"></div>
+              </div>
+              <p style="margin: 0; font-size: 24px; font-weight: 500; color: var(--gris-900);">InsuGO</p>
+              <p style="margin: 6px 0 0; font-size: 15px; color: var(--gris-600); line-height: 1.5;">Tu compañero digital para el manejo de la prediabetes y la diabetes tipo 2</p>
+            </div>
+
+            <div class="card" style="border-left: 5px solid var(--verde);">
+              <p style="margin: 0 0 6px; font-size: 14px; color: var(--verde-oscuro); font-weight: 500;">¿Qué es InsuGO?</p>
+              <p style="margin: 0; font-size: 16px; color: var(--gris-900); line-height: 1.6;">Más que un anotador, InsuGO es un compañero digital que te acompaña en la transición hacia un nuevo estilo de vida, adaptando sus recomendaciones a tus resultados, tu entorno y tu contexto diario.</p>
+            </div>
+
+            <div>
+              <p style="margin: 0 0 12px; font-size: 17px; font-weight: 500; color: var(--gris-900);">¿Qué podés hacer?</p>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+
+                <div style="display: flex; align-items: flex-start; gap: 12px; background: white; border: 1px solid #E8E4D6; border-radius: 12px; padding: 14px;">
+                  <div style="width: 36px; height: 36px; border-radius: 10px; background: var(--naranja-claro); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid var(--naranja);"></div>
+                  </div>
+                  <div>
+                    <p style="margin: 0 0 4px; font-size: 15px; font-weight: 500; color: var(--gris-900);">Registrar glucosa</p>
+                    <p style="margin: 0; font-size: 14px; color: var(--gris-600); line-height: 1.4;">Anotá tus mediciones diarias y cruzalas con tus hábitos y el clima.</p>
+                  </div>
+                </div>
+
+                <div style="display: flex; align-items: flex-start; gap: 12px; background: white; border: 1px solid #E8E4D6; border-radius: 12px; padding: 14px;">
+                  <div style="width: 36px; height: 36px; border-radius: 10px; background: var(--verde-claro); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 16px; height: 16px; border-radius: 4px; border: 2.5px solid var(--verde-oscuro);"></div>
+                  </div>
+                  <div>
+                    <p style="margin: 0 0 4px; font-size: 15px; font-weight: 500; color: var(--gris-900);">Consejos personalizados</p>
+                    <p style="margin: 0; font-size: 14px; color: var(--gris-600); line-height: 1.4;">Nutrición estacional, actividad física según el clima patagónico, cuidado de pies y más.</p>
+                  </div>
+                </div>
+
+                <div style="display: flex; align-items: flex-start; gap: 12px; background: white; border: 1px solid #E8E4D6; border-radius: 12px; padding: 14px;">
+                  <div style="width: 36px; height: 36px; border-radius: 10px; background: var(--ambar-claro); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 16px; height: 3px; background: #BA7517; border-radius: 2px; box-shadow: 0 5px 0 #BA7517, 0 -5px 0 #BA7517;"></div>
+                  </div>
+                  <div>
+                    <p style="margin: 0 0 4px; font-size: 15px; font-weight: 500; color: var(--gris-900);">Historial visual</p>
+                    <p style="margin: 0; font-size: 14px; color: var(--gris-600); line-height: 1.4;">Compartí un resumen semanal con tu médico para ajustar el tratamiento con datos reales.</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div style="background: var(--verde-claro); border: 1px solid #C0DD97; border-radius: 14px; padding: 16px;">
+              <p style="margin: 0 0 6px; font-size: 14px; color: var(--verde-oscuro); font-weight: 500;">Enfoque regional</p>
+              <p style="margin: 0; font-size: 15px; color: #27500A; line-height: 1.5;">Los consejos tienen en cuenta el clima patagónico, la disponibilidad de alimentos locales y las alertas sanitarias de tu zona.</p>
+            </div>
+
+            <div style="background: var(--rojo-claro); border: 1px solid #F5CCCC; border-radius: 14px; padding: 16px;">
+              <p style="margin: 0 0 6px; font-size: 14px; color: var(--rojo-oscuro); font-weight: 500;">Importante</p>
+              <p style="margin: 0; font-size: 15px; color: var(--rojo-texto); line-height: 1.5;">InsuGO no reemplaza la consulta médica. Siempre seguí las indicaciones de tu equipo de salud.</p>
+            </div>
+
           </div>
         </section>
 
