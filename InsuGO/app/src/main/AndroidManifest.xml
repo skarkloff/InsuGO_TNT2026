@@ -10,17 +10,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InsuGO">
-        <activity android:name=".LoginActivity" android:exported="true">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.InsuGO">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".PerfilInicialActivity"/>
-        <activity android:name=".HomeActivity"/>
-        <activity android:name=".GlucosaActivity"/>
-        <activity android:name=".AcercaDeActivity"/>
-        <activity android:name=".MainActivity" android:exported="false"
-            android:theme="@style/Theme.InsuGO"/>
     </application>
 </manifest>

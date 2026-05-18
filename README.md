@@ -1,7 +1,53 @@
-# Gestión Integral y Regionalizada para Prediabetes y Diabetes Tipo 2
+# InsuGO
 
 **Taller de Nuevas Tecnologías 2026 — Skarkloff, Zapellini**
 
-Un grupo de médicos especialistas en endocrinología y nutrición del Valle Inferior del Río Chubut nos ha planteado la necesidad de una plataforma que brinde recomendaciones personalizadas a pacientes recientemente diagnosticados con prediabetes o diabetes tipo 2, con un enfoque inicial en el control glucémico y la prevención de complicaciones severas. Esta aplicación no será simplemente un anotador virtual, sino que han pensado en ella como un verdadero compañero digital que guiará a los pacientes en la transición hacia un nuevo estilo de vida. A través de un sistema dinámico, adaptará sus recomendaciones según los últimos resultados de laboratorio del usuario, pero fundamentalmente según su entorno geográfico y climático. Los consejos estarán organizados en categorías esenciales como **nutrición estacional** (priorizando la disponibilidad de alimentos locales de bajo índice glucémico, como los frutos rojos de la zona, y ajustándose a los precios regionales), **actividad física inteligente** (ofreciendo rutinas de interior cuando el pronóstico indique fuertes vientos patagónicos o heladas), **cuidado preventivo de los pies**, **manejo del estrés** y **alertas sanitarias locales**, ofreciendo así una orientación integral y realista.
+InsuGO es una aplicación Android para pacientes con prediabetes o diabetes tipo 2, desarrollada en colaboración con médicos especialistas del Valle Inferior del Río Chubut. Va más allá de un simple anotador: actúa como compañero digital que acompaña al paciente en su cambio de estilo de vida, adaptando sus recomendaciones según sus resultados, su entorno geográfico y el clima de la región.
 
-Además, la aplicación debería incluir una funcionalidad clave para el personal médico: un **registro detallado e intuitivo de los niveles de glucosa capilar, la alimentación diaria y los minutos de movimiento físico**. De manera sencilla, los usuarios podrán reportar sus métricas, proporcionando información valiosa que cruzará los picos de glucosa con los hábitos y el clima de esos días para una mejora continua de las recomendaciones. Se espera que, al momento de asistir a la consulta, el paciente pueda compartir rápidamente este **historial visual** con su médico o médica, permitiendo ajustar los tratamientos con datos precisos del día a día en lugar de depender únicamente de los análisis trimestrales.
+Los consejos se organizan en categorías como nutrición estacional (priorizando alimentos locales de bajo índice glucémico), actividad física adaptada al clima patagónico, cuidado preventivo de pies, manejo del estrés y alertas sanitarias locales.
+
+El paciente puede registrar glucosa, comidas y actividad física diaria. Al asistir a la consulta, comparte un historial visual semanal con su médico para ajustar el tratamiento con datos reales, sin depender únicamente de los análisis trimestrales.
+
+---
+
+## Arquitectura
+
+Clean Architecture en capas, Single Activity con navegación Compose.
+
+```
+com.health.insugo/
+├── domain/            Entidades y contratos (sin dependencias de Android)
+├── data/              Implementaciones de repositorios (in-memory)
+├── presentation/
+│   ├── navigation/    NavGraph con las 9 rutas
+│   ├── viewmodel/     ViewModels con StateFlow
+│   └── ui/            Composables stateless (una Screen por pantalla)
+├── ui/theme/          Colores, tipografía y tema
+└── MainActivity.kt    Único punto de entrada + grafo de DI manual
+```
+
+## Tecnologías
+
+| Componente | Tecnología |
+|---|---|
+| Lenguaje | Kotlin |
+| UI | Jetpack Compose + Material Design 3 |
+| Navegación | Navigation Compose |
+| Estado | ViewModel + StateFlow |
+| Build | Gradle con Kotlin DSL |
+
+## Pantallas
+
+| # | Pantalla |
+|---|---|
+| 1 | Login |
+| 2 | Perfil inicial |
+| 3 | Inicio / Dashboard |
+| 4 | Anotar glucosa |
+| 5 | Comida y movimiento |
+| 6 | Consejos |
+| 7 | Historial semanal |
+| 8 | Compartir reporte |
+| 9 | Acerca de |
+
+El prototipo navegable completo se encuentra en `docs/prototipo/prototipo_inicial.html`.

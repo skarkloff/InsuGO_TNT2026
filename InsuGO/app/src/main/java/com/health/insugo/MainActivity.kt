@@ -1,14 +1,20 @@
 package com.health.insugo
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import com.health.insugo.presentation.navigation.InsuGoNavGraph
+import com.health.insugo.ui.theme.InsuGOTheme
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity(Intent(this, LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        })
+        enableEdgeToEdge()
+        setContent {
+            InsuGOTheme {
+                InsuGoNavGraph()
+            }
+        }
     }
 }
