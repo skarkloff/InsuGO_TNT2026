@@ -78,9 +78,23 @@ domain/
     GlucosaRepository.kt    ← interface
     ComidaRepository.kt
     PerfilRepository.kt
+  usecase/
+    glucosa/
+      GuardarGlucosaUseCase.kt
+      ObtenerGlucosasUseCase.kt
+    comida/
+      GuardarComidaUseCase.kt
+      ObtenerComidasUseCase.kt
+    perfil/
+      GuardarPerfilUseCase.kt
+      ObtenerPerfilUseCase.kt
+    historial/
+      ObtenerResumenSemanalUseCase.kt   ← calcula promedio diario para el gráfico
 ```
 
 Los repositorios convierten `Entity ↔ modelo de dominio` (mappers).
+
+Cada use case recibe el repositorio por constructor (`@Inject`) y expone una única función `operator fun invoke(...)`, retornando `Flow` o un resultado suspendido según corresponda.
 
 ---
 
@@ -129,10 +143,11 @@ En `InsuGoNavGraph`, obtener cada ViewModel con `viewModel()` de Compose y pasar
 2. Entities + DAOs + AppDatabase
 3. `DatabaseModule` de Hilt + `InsuGoApplication` con `@HiltAndroidApp`
 4. Repositorios (interface en `domain/` + impl en `data/`) con `@Binds`
-5. ViewModel de Glucosa + conectar `GlucosaScreen`
-6. ViewModel de Comida + conectar `ComidaScreen`
-7. ViewModel de Perfil + conectar `PerfilInicialScreen`
-8. ViewModel de Historial + reemplazar datos hardcodeados con datos reales
+5. Use cases en `domain/usecase/` (uno por operación, inyectados con `@Inject`)
+6. ViewModel de Glucosa + conectar `GlucosaScreen`
+7. ViewModel de Comida + conectar `ComidaScreen`
+8. ViewModel de Perfil + conectar `PerfilInicialScreen`
+9. ViewModel de Historial + reemplazar datos hardcodeados con datos reales
 
 ---
 
