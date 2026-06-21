@@ -106,6 +106,8 @@ Crear en `presentation/viewmodel/`:
 - `ComidaViewModel` — igual, para los campos de comida y actividad
 - `PerfilViewModel` — lee/escribe el perfil del usuario (nombre, diagnóstico)
 
+> **Rotación de pantalla:** hoy `GlucosaScreen` y `ComidaScreen` guardan el valor en `remember {}`, atado a la composición. Como `AndroidManifest.xml` no declara `android:configChanges`, al rotar la pantalla la Activity se destruye y se recrea, y ese estado se pierde. Al mover el estado a `StateFlow` dentro del ViewModel, esto queda resuelto: el `ViewModel` vive en el `ViewModelStore` de la Activity, que sí sobrevive a la recreación por cambio de configuración. Es un mecanismo distinto al de Room: el ViewModel cubre la pérdida de datos *no guardados* durante la sesión (rotación, cambio de idioma); Room cubre la persistencia de lo ya confirmado con "Guardar" entre sesiones o tras el cierre del proceso.
+
 ---
 
 ### 5. Hilt — Inyección de dependencias
