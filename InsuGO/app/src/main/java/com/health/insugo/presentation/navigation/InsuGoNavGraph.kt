@@ -7,11 +7,21 @@ import androidx.navigation.compose.rememberNavController
 import com.health.insugo.presentation.ui.*
 
 @Composable
-fun InsuGoNavGraph() {
+fun InsuGoNavGraph(startDestination: String = "HOME") {
     val navController = rememberNavController()
 
-    // Establecemos HOME como la pantalla inicial del flujo
-    NavHost(navController = navController, startDestination = "HOME") {
+    NavHost(navController = navController, startDestination = startDestination) {
+
+        composable("PERFIL_INICIAL") {
+            PerfilInicialScreen(
+                onContinuar = {
+                    navController.navigate("HOME") {
+                        popUpTo("PERFIL_INICIAL") { inclusive = true }
+                    }
+                },
+                onVolver = { navController.popBackStack() }
+            )
+        }
 
         composable("HOME") {
             HomeScreen(
@@ -19,8 +29,13 @@ fun InsuGoNavGraph() {
                 onIrAComida = { navController.navigate("COMIDA") },
                 onIrAConsejos = { navController.navigate("CONSEJOS") },
                 onIrAHistorial = { navController.navigate("HISTORIAL") },
-                onIrAAcerca = { navController.navigate("ACERCA") }
+                onIrAAcerca = { navController.navigate("ACERCA") },
+                onIrAPerfil = { navController.navigate("PERFIL") }
             )
+        }
+
+        composable("PERFIL") {
+            PerfilScreen(onVolver = { navController.popBackStack() })
         }
 
         composable("GLUCOSA") {

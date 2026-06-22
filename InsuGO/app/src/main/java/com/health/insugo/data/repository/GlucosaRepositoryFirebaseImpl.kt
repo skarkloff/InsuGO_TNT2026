@@ -57,7 +57,9 @@ class GlucosaRepositoryFirebaseImpl(
         val listener = coleccion.orderBy("fechaHora", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    close(error)
+                    // Ocurre, por ejemplo, al cerrar sesión: Firestore corta el listener con
+                    // PERMISSION_DENIED. No relanzamos para no tirar abajo al colector.
+                    close()
                     return@addSnapshotListener
                 }
 

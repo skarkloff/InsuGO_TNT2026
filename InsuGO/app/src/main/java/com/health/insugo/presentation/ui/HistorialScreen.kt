@@ -9,12 +9,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.insugo.presentation.viewmodel.HistorialViewModel
+import org.koin.androidx.compose.koinViewModel
 
 private val VerdeHist = Color(0xFF1D9E75)
 private val NaranjaHist = Color(0xFFD85A30)
@@ -29,23 +33,15 @@ private val Gris600Hist = Color(0xFF5F5E5A)
 private val Gris900Hist = Color(0xFF2C2C2A)
 private val FondoHist = Color(0xFFF1EFE8)
 
-// Datos de ejemplo para el gráfico
-private val barras = listOf(
-    Triple(0.50f, "L", false),
-    Triple(0.75f, "M", true),
-    Triple(0.45f, "M", false),
-    Triple(0.60f, "J", false),
-    Triple(0.90f, "V", true),
-    Triple(0.55f, "S", false),
-    Triple(0.50f, "D", false),
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistorialScreen(
     onCompartir: () -> Unit,
-    onVolver: () -> Unit
+    onVolver: () -> Unit,
+    viewModel: HistorialViewModel = koinViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -90,7 +86,7 @@ fun HistorialScreen(
                 ) {
                     Column(modifier = Modifier.padding(14.dp)) {
                         Text("Promedio", fontSize = 13.sp, color = Color(0xFF27500A))
-                        Text("124", fontSize = 26.sp, fontWeight = FontWeight.Medium, color = VerdeTextoHist)
+                        Text("${uiState.promedio}", fontSize = 26.sp, fontWeight = FontWeight.Medium, color = VerdeTextoHist)
                         Text("mg/dL", fontSize = 12.sp, color = Color(0xFF3B6D11))
                     }
                 }
@@ -101,7 +97,7 @@ fun HistorialScreen(
                 ) {
                     Column(modifier = Modifier.padding(14.dp)) {
                         Text("Mediciones", fontSize = 13.sp, color = AmbarOscuroHist)
-                        Text("12", fontSize = 26.sp, fontWeight = FontWeight.Medium, color = AmbarTextoHist)
+                        Text("${uiState.totalMediciones}", fontSize = 26.sp, fontWeight = FontWeight.Medium, color = AmbarTextoHist)
                         Text("esta semana", fontSize = 12.sp, color = AmbarOscuroHist)
                     }
                 }
@@ -125,16 +121,16 @@ fun HistorialScreen(
                         verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        barras.forEach { (altura, _, esAlto) ->
+                        uiState.barras.forEach { barra ->
                             val color = when {
-                                altura >= 0.85f -> RojoHist
-                                altura >= 0.70f -> Color(0xFFBA7517)
+                                barra.altura >= 0.85f -> RojoHist
+                                barra.altura >= 0.70f -> Color(0xFFBA7517)
                                 else -> VerdeHist
                             }
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .fillMaxHeight(altura)
+                                    .fillMaxHeight(barra.altura)
                                     .background(color, RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
                             )
                         }
@@ -145,9 +141,9 @@ fun HistorialScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        barras.forEach { (_, dia, _) ->
+                        uiState.barras.forEach { barra ->
                             Text(
-                                dia,
+                                barra.dia,
                                 modifier = Modifier.weight(1f),
                                 fontSize = 13.sp,
                                 color = Gris600Hist,

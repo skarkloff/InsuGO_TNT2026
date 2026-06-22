@@ -37,7 +37,7 @@ private val Gris900 = Color(0xFF2C2C2A)
 @Composable
 fun LoginScreen(
     onLoginExitoso: () -> Unit,
-    onIrARegistro: () -> Unit,
+    onRegistroExitoso: () -> Unit,
     // 🔌 Inyectamos el ViewModel automáticamente con Koin
     viewModel: AuthViewModel = koinViewModel()
 ) {
@@ -197,7 +197,22 @@ fun LoginScreen(
             }
 
             TextButton(
-                onClick = onIrARegistro,
+                onClick = {
+                    if (usuario.isNotBlank() && password.isNotBlank()) {
+                        isLoading = true
+                        errorMsg = null
+                        viewModel.registrarse(usuario, password) { exito, error ->
+                            isLoading = false
+                            if (exito) {
+                                onRegistroExitoso()
+                            } else {
+                                errorMsg = error ?: "No se pudo crear la cuenta"
+                            }
+                        }
+                    } else {
+                        errorMsg = "Completá correo y contraseña para registrarte"
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading
             ) {

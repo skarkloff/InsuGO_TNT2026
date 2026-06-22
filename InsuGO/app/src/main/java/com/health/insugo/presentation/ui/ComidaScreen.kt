@@ -1,5 +1,6 @@
 package com.health.insugo.presentation.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,9 +11,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.insugo.presentation.viewmodel.ComidaViewModel
+import org.koin.androidx.compose.koinViewModel
 
 private val VerdeCom = Color(0xFF1D9E75)
 private val NaranjaCom = Color(0xFFD85A30)
@@ -27,14 +31,25 @@ private val FondoCom = Color(0xFFF1EFE8)
 @Composable
 fun ComidaScreen(
     onGuardar: () -> Unit,
-    onVolver: () -> Unit
+    onVolver: () -> Unit,
+    viewModel: ComidaViewModel = koinViewModel()
 ) {
-    var desayuno by remember { mutableStateOf("") }
-    var almuerzo by remember { mutableStateOf("") }
-    var cena by remember { mutableStateOf("") }
-    var actividad by remember { mutableStateOf("Caminar") }
-    var minutos by remember { mutableStateOf(30f) }
+    val context = LocalContext.current
+    val desayuno by viewModel.desayuno.collectAsState()
+    val almuerzo by viewModel.almuerzo.collectAsState()
+    val cena by viewModel.cena.collectAsState()
+    val actividad by viewModel.actividad.collectAsState()
+    val minutos by viewModel.minutos.collectAsState()
+    val errorMensaje by viewModel.errorMensaje.collectAsState()
+    var estaGuardando by remember { mutableStateOf(false) }
     val actividades = listOf("Caminar", "En casa", "Bici")
+
+    LaunchedEffect(errorMensaje) {
+        errorMensaje?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            viewModel.limpiarError()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -68,7 +83,7 @@ fun ComidaScreen(
 
             OutlinedTextField(
                 value = desayuno,
-                onValueChange = { desayuno = it },
+                onValueChange = { viewModel.actualizarDesayuno(it) },
                 label = { Text("Desayuno") },
                 placeholder = { Text("Ej: mate con tostadas") },
                 modifier = Modifier.fillMaxWidth(),
@@ -77,7 +92,7 @@ fun ComidaScreen(
 
             OutlinedTextField(
                 value = almuerzo,
-                onValueChange = { almuerzo = it },
+                onValueChange = { viewModel.actualizarAlmuerzo(it) },
                 label = { Text("Almuerzo") },
                 placeholder = { Text("Ej: pollo con ensalada") },
                 modifier = Modifier.fillMaxWidth(),
@@ -86,7 +101,7 @@ fun ComidaScreen(
 
             OutlinedTextField(
                 value = cena,
-                onValueChange = { cena = it },
+                onValueChange = { viewModel.actualizarCena(it) },
                 label = { Text("Cena") },
                 placeholder = { Text("Ej: tortilla de zapallitos") },
                 modifier = Modifier.fillMaxWidth(),
@@ -109,7 +124,7 @@ fun ComidaScreen(
                         actividades.forEach { act ->
                             val seleccionado = actividad == act
                             Button(
-                                onClick = { actividad = act },
+                                onClick = { viewModel.seleccionarActividad(act) },
                                 modifier = Modifier.weight(1f).height(44.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -131,7 +146,7 @@ fun ComidaScreen(
                     )
                     Slider(
                         value = minutos,
-                        onValueChange = { minutos = it },
+                        onValueChange = { viewModel.actualizarMinutos(it) },
                         valueRange = 0f..120f,
                         colors = SliderDefaults.colors(
                             thumbColor = VerdeCom,
@@ -144,12 +159,23 @@ fun ComidaScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
-                onClick = onGuardar,
+                onClick = {
+                    estaGuardando = true
+                    viewModel.guardarComida {
+                        estaGuardando = false
+                        onGuardar()
+                    }
+                },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = NaranjaCom)
+                colors = ButtonDefaults.buttonColors(containerColor = NaranjaCom),
+                enabled = !estaGuardando
             ) {
-                Text("Guardar día", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                if (estaGuardando) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                } else {
+                    Text("Guardar día", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                }
             }
         }
     }

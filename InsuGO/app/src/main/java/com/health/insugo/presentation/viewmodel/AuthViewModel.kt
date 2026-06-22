@@ -42,6 +42,17 @@ class AuthViewModel(
         }
     }
 
+    fun registrarse(email: String, clave: String, onResult: (Boolean, String?) -> Unit) {
+        viewModelScope.launch {
+            val result = authRepository.registrarse(email, clave)
+            if (result.isSuccess) {
+                onResult(true, null)
+            } else {
+                onResult(false, result.exceptionOrNull()?.message)
+            }
+        }
+    }
+
     fun iniciarSesionConGoogle(idToken: String, onResult: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
             val result = authRepository.iniciarSesionConGoogle(idToken)
@@ -56,6 +67,27 @@ class AuthViewModel(
     fun cerrarSesion() {
         viewModelScope.launch {
             authRepository.cerrarSesion()
+        }
+    }
+
+    fun reautenticar(clave: String, onResult: (Boolean, String?) -> Unit) {
+        viewModelScope.launch {
+            val result = authRepository.reautenticar(clave)
+            onResult(result.isSuccess, result.exceptionOrNull()?.message)
+        }
+    }
+
+    fun actualizarEmail(nuevoEmail: String, onResult: (Boolean, String?) -> Unit) {
+        viewModelScope.launch {
+            val result = authRepository.actualizarEmail(nuevoEmail)
+            onResult(result.isSuccess, result.exceptionOrNull()?.message)
+        }
+    }
+
+    fun actualizarClave(nuevaClave: String, onResult: (Boolean, String?) -> Unit) {
+        viewModelScope.launch {
+            val result = authRepository.actualizarClave(nuevaClave)
+            onResult(result.isSuccess, result.exceptionOrNull()?.message)
         }
     }
 }

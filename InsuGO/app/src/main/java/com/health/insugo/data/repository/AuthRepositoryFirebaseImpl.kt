@@ -1,5 +1,6 @@
 package com.health.insugo.data.repository
 
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -48,6 +49,21 @@ class AuthRepositoryFirebaseImpl(
         }
     }
 
+    override suspend fun registrarse(email: String, clave: String): Result<Usuario> {
+        return try {
+            val result = firebaseAuth.createUserWithEmailAndPassword(email, clave).await()
+            val user = mapearUsuario(result.user)
+
+            if (user != null) {
+                Result.success(user)
+            } else {
+                Result.failure(Exception("No se pudo crear la cuenta"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     override suspend fun iniciarSesionConGoogle(idToken: String): Result<Usuario> {
         return try {
             val credential = GoogleAuthProvider.getCredential(idToken, null)
@@ -66,5 +82,42 @@ class AuthRepositoryFirebaseImpl(
 
     override suspend fun cerrarSesion() {
         firebaseAuth.signOut()
+    }
+
+    override suspend fun reautenticar(clave: String): Result<Unit> {
+        val user = firebaseAuth.currentUser ?: return Result.failure(Exception("No logueado"))
+        val email = user.email ?: return Result.failure(Exception("La cuenta no tiene un correo asociado"))
+
+        return try {
+            val credential = EmailAuthProvider.getCredential(email, clave)
+            user.reauthenticate(credential).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun actualizarEmail(nuevoEmail: String): Result<Unit> {
+        val user = firebaseAuth.currentUser ?: return Result.failure(Exception("No logueado"))
+
+        return try {
+            // Envía un correo de verificación a la nueva dirección; el cambio se aplica
+            // cuando el usuario lo confirma (Firebase ya no permite cambiarlo sin verificar)
+            user.verifyBeforeUpdateEmail(nuevoEmail).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun actualizarClave(nuevaClave: String): Result<Unit> {
+        val user = firebaseAuth.currentUser ?: return Result.failure(Exception("No logueado"))
+
+        return try {
+            user.updatePassword(nuevaClave).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

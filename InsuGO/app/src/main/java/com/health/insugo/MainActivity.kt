@@ -10,6 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.health.insugo.presentation.AuthViewModel
 import com.health.insugo.presentation.navigation.InsuGoNavGraph
@@ -45,17 +48,15 @@ fun EnrutadorPrincipal(
 ) {
     // Observamos en tiempo real si hay un usuario conectado en Firebase
     val usuarioActual by viewModel.usuarioActual.collectAsState()
+    var destinoInicial by remember { mutableStateOf("HOME") }
 
     if (usuarioActual == null) {
         LoginScreen(
-            onLoginExitoso = {
-            },
-            onIrARegistro = {
-                // Si tenés una pantalla de registro armada, podés manejarla acá
-            }
+            onLoginExitoso = { destinoInicial = "HOME" },
+            onRegistroExitoso = { destinoInicial = "PERFIL_INICIAL" }
         )
     } else {
         // 🟢 Hay usuario: ¡Encendemos tu sistema de navegación!
-        InsuGoNavGraph()
+        InsuGoNavGraph(startDestination = destinoInicial)
     }
 }

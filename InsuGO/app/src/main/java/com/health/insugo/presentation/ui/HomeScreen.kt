@@ -10,6 +10,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,6 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.insugo.presentation.AuthViewModel
+import com.health.insugo.presentation.viewmodel.HomeViewModel
+import org.koin.androidx.compose.koinViewModel
 
 private val VerdeH = Color(0xFF1D9E75)
 private val NaranjaH = Color(0xFFD85A30)
@@ -38,8 +46,14 @@ fun HomeScreen(
     onIrAComida: () -> Unit,
     onIrAConsejos: () -> Unit,
     onIrAHistorial: () -> Unit,
-    onIrAAcerca: () -> Unit
+    onIrAAcerca: () -> Unit,
+    onIrAPerfil: () -> Unit,
+    viewModel: HomeViewModel = koinViewModel(),
+    authViewModel: AuthViewModel = koinViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    var mostrarMenuUsuario by remember { mutableStateOf(false) }
+
     Column(modifier = Modifier.fillMaxSize().background(FondoH)) {
 
         // Header verde
@@ -56,7 +70,10 @@ fun HomeScreen(
             ) {
                 Column {
                     Text("Buen día", color = Color.White.copy(alpha = 0.9f), fontSize = 16.sp)
-                    Text("Patricio", color = Color.White, fontSize = 26.sp, fontWeight = FontWeight.Medium)
+                    Text(
+                        uiState.nombre.ifBlank { "Usuario" },
+                        color = Color.White, fontSize = 26.sp, fontWeight = FontWeight.Medium
+                    )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(
@@ -70,14 +87,39 @@ fun HomeScreen(
                     ) {
                         Text("?", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Medium)
                     }
-                    Box(
-                        modifier = Modifier
-                            .size(46.dp)
-                            .clip(CircleShape)
-                            .background(NaranjaH),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("P", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                    Box {
+                        Box(
+                            modifier = Modifier
+                                .size(46.dp)
+                                .clip(CircleShape)
+                                .background(NaranjaH)
+                                .clickable { mostrarMenuUsuario = true },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                uiState.nombre.firstOrNull()?.uppercase() ?: "U",
+                                color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Medium
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = mostrarMenuUsuario,
+                            onDismissRequest = { mostrarMenuUsuario = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Ver perfil") },
+                                onClick = {
+                                    mostrarMenuUsuario = false
+                                    onIrAPerfil()
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Cerrar sesión") },
+                                onClick = {
+                                    mostrarMenuUsuario = false
+                                    authViewModel.cerrarSesion()
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -104,7 +146,7 @@ fun HomeScreen(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Última glucemia (Actualmente estático, luego lo conectaremos a su propio HomeViewModel)
+            // Última glucemia
             Surface(
                 shape = RoundedCornerShape(16.dp),
                 color = VerdeClaroH,
@@ -113,11 +155,17 @@ fun HomeScreen(
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text("Tu última glucemia", fontSize = 15.sp, color = Color(0xFF27500A), fontWeight = FontWeight.Medium)
                     Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.padding(top = 8.dp)) {
-                        Text("118", fontSize = 48.sp, fontWeight = FontWeight.Medium, color = VerdeTextoH, lineHeight = 48.sp)
+                        Text(
+                            uiState.valor?.toString() ?: "--",
+                            fontSize = 48.sp, fontWeight = FontWeight.Medium, color = VerdeTextoH, lineHeight = 48.sp
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("mg/dL", fontSize = 17.sp, color = Color(0xFF3B6D11), modifier = Modifier.padding(bottom = 6.dp))
                     }
-                    Text("Hoy 8:30 · En rango", fontSize = 15.sp, color = Color(0xFF3B6D11))
+                    Text(
+                        if (uiState.valor != null) "${uiState.fechaTexto} · ${uiState.estado}" else "Sin mediciones todavía",
+                        fontSize = 15.sp, color = Color(0xFF3B6D11)
+                    )
                 }
             }
 
@@ -201,7 +249,7 @@ fun HomeScreen(
                 ) {
                     Column {
                         Text("Ver mi semana", fontSize = 16.sp, fontWeight = FontWeight.Medium, color = Gris900H)
-                        Text("Promedio: 124 mg/dL", fontSize = 14.sp, color = Gris600H)
+                        Text("Promedio: ${uiState.promedioSemanal} mg/dL", fontSize = 14.sp, color = Gris600H)
                     }
                     Text("›", fontSize = 24.sp, color = Gris600H)
                 }

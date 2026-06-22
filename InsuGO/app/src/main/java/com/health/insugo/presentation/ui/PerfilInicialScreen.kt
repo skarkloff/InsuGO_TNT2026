@@ -1,5 +1,6 @@
 package com.health.insugo.presentation.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,9 +10,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.insugo.presentation.viewmodel.PerfilViewModel
+import org.koin.androidx.compose.koinViewModel
 
 private val VerdeP = Color(0xFF1D9E75)
 private val NaranjaP = Color(0xFFD85A30)
@@ -26,10 +30,21 @@ private val FondoP = Color(0xFFF1EFE8)
 @Composable
 fun PerfilInicialScreen(
     onContinuar: () -> Unit,
-    onVolver: () -> Unit
+    onVolver: () -> Unit,
+    viewModel: PerfilViewModel = koinViewModel()
 ) {
-    var nombre by remember { mutableStateOf("") }
-    var diagnostico by remember { mutableStateOf("Diabetes tipo 2") }
+    val context = LocalContext.current
+    val nombre by viewModel.nombre.collectAsState()
+    val diagnostico by viewModel.diagnostico.collectAsState()
+    val errorMensaje by viewModel.errorMensaje.collectAsState()
+    var estaGuardando by remember { mutableStateOf(false) }
+
+    LaunchedEffect(errorMensaje) {
+        errorMensaje?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            viewModel.limpiarError()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -63,6 +78,14 @@ fun PerfilInicialScreen(
             }
             Text("Paso 2 de 3", fontSize = 14.sp, color = Gris600P)
 
+            val guardarYContinuar = {
+                estaGuardando = true
+                viewModel.guardarPerfil {
+                    estaGuardando = false
+                    onContinuar()
+                }
+            }
+
             Text("Contanos sobre vos", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = Gris900P)
             Text(
                 "Esto nos ayuda a darte consejos justos para vos.",
@@ -71,7 +94,7 @@ fun PerfilInicialScreen(
 
             OutlinedTextField(
                 value = nombre,
-                onValueChange = { nombre = it },
+                onValueChange = { viewModel.actualizarNombre(it) },
                 label = { Text("¿Cómo te llamás?") },
                 placeholder = { Text("Luis") },
                 modifier = Modifier.fillMaxWidth(),
@@ -85,7 +108,7 @@ fun PerfilInicialScreen(
                 listOf("Diabetes tipo 2", "Prediabetes").forEach { opcion ->
                     val seleccionado = diagnostico == opcion
                     Button(
-                        onClick = { diagnostico = opcion },
+                        onClick = { viewModel.seleccionarDiagnostico(opcion) },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -114,14 +137,14 @@ fun PerfilInicialScreen(
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Button(
-                            onClick = onContinuar,
+                            onClick = {},
                             modifier = Modifier.weight(1f).height(48.dp),
                             shape = RoundedCornerShape(10.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = VerdeP)
                         ) { Text("Sí, activar", fontSize = 16.sp, fontWeight = FontWeight.Medium) }
 
                         OutlinedButton(
-                            onClick = onContinuar,
+                            onClick = {},
                             modifier = Modifier.weight(1f).height(48.dp),
                             shape = RoundedCornerShape(10.dp)
                         ) { Text("Ahora no", fontSize = 16.sp, color = Gris600P) }
@@ -132,12 +155,17 @@ fun PerfilInicialScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                onClick = onContinuar,
+                onClick = guardarYContinuar,
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = NaranjaP)
+                colors = ButtonDefaults.buttonColors(containerColor = NaranjaP),
+                enabled = !estaGuardando
             ) {
-                Text("Continuar", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                if (estaGuardando) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                } else {
+                    Text("Continuar", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                }
             }
         }
     }
