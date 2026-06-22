@@ -1,5 +1,6 @@
 package com.health.insugo.presentation.ui
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -11,11 +12,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.health.insugo.R
+import com.health.insugo.presentation.AuthViewModel
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 private val Verde = Color(0xFF1D9E75)
 private val Naranja = Color(0xFFD85A30)
@@ -23,22 +34,25 @@ private val Gris600 = Color(0xFF5F5E5A)
 private val Gris200 = Color(0xFFD3D1C7)
 private val Gris900 = Color(0xFF2C2C2A)
 
-// Credenciales hardcodeadas (temporario hasta implementar auth real)
-private const val USUARIO_VALIDO = "admin"
-private const val PASSWORD_VALIDA = "1234"
-
 @Composable
 fun LoginScreen(
     onLoginExitoso: () -> Unit,
-    onIrARegistro: () -> Unit
+    onIrARegistro: () -> Unit,
+    // 🔌 Inyectamos el ViewModel automáticamente con Koin
+    viewModel: AuthViewModel = koinViewModel()
 ) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
     var usuario by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var error by remember { mutableStateOf(false) }
+    // Cambiamos el booleano por un String para mostrar el error real de Firebase
+    var errorMsg by remember { mutableStateOf<String?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize()) {
 
-        // Header verde
+        // Header verde (Intacto, está genial)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,18 +95,18 @@ fun LoginScreen(
 
             OutlinedTextField(
                 value = usuario,
-                onValueChange = { usuario = it; error = false },
+                onValueChange = { usuario = it; errorMsg = null },
                 label = { Text("Correo o DNI") },
                 placeholder = { Text("tucorreo@ejemplo.com") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
-                isError = error
+                isError = errorMsg != null
             )
 
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it; error = false },
+                onValueChange = { password = it; errorMsg = null },
                 label = { Text("Contraseña") },
                 placeholder = { Text("••••••••") },
                 visualTransformation = PasswordVisualTransformation(),
@@ -100,12 +114,13 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
-                isError = error
+                isError = errorMsg != null
             )
 
-            if (error) {
+            // Mostramos el mensaje de error si existe
+            if (errorMsg != null) {
                 Text(
-                    "Usuario o contraseña incorrectos",
+                    text = errorMsg ?: "Error de autenticación",
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 14.sp
                 )
@@ -113,19 +128,34 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-                    if (usuario == USUARIO_VALIDO && password == PASSWORD_VALIDA) {
-                        onLoginExitoso()
+                    if (usuario.isNotBlank() && password.isNotBlank()) {
+                        isLoading = true
+                        errorMsg = null
+                        // 🚀 Llamamos a Firebase!
+                        viewModel.iniciarSesion(usuario, password) { exito, error ->
+                            isLoading = false
+                            if (exito) {
+                                onLoginExitoso()
+                            } else {
+                                errorMsg = error ?: "Credenciales inválidas"
+                            }
+                        }
                     } else {
-                        error = true
+                        errorMsg = "Por favor, completá todos los campos"
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Naranja)
+                colors = ButtonDefaults.buttonColors(containerColor = Naranja),
+                enabled = !isLoading
             ) {
-                Text("Ingresar", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                if (isLoading) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                } else {
+                    Text("Ingresar", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                }
             }
 
             Row(
@@ -138,12 +168,20 @@ fun LoginScreen(
             }
 
             OutlinedButton(
-                onClick = { /* Google Auth — próximamente */ },
+                onClick = {
+                    // 🚀 Levantamos el cartelito de Google en una corrutina
+                    coroutineScope.launch {
+                        iniciarConGoogle(context, viewModel, onLoginExitoso) { error ->
+                            errorMsg = error
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RoundedCornerShape(12.dp),
-                border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.5.dp)
+                border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.5.dp),
+                enabled = !isLoading
             ) {
                 Box(
                     modifier = Modifier
@@ -160,10 +198,53 @@ fun LoginScreen(
 
             TextButton(
                 onClick = onIrARegistro,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isLoading
             ) {
                 Text("¿Primera vez? Registrate", color = Verde, fontWeight = FontWeight.Medium)
             }
         }
+    }
+}
+
+// Lógica pesada de Google Sign-In separada de la vista principal
+private suspend fun iniciarConGoogle(
+    context: Context,
+    viewModel: AuthViewModel,
+    onLoginExitoso: () -> Unit,
+    onError: (String) -> Unit
+) {
+    try {
+        val credentialManager = CredentialManager.create(context)
+
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId(context.getString(R.string.default_web_client_id))
+            .build()
+
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        val result = credentialManager.getCredential(
+            request = request,
+            context = context,
+        )
+
+        val credential = result.credential
+        if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+
+            viewModel.iniciarSesionConGoogle(googleIdTokenCredential.idToken) { exito, errorMsg ->
+                if (exito) {
+                    onLoginExitoso()
+                } else {
+                    onError(errorMsg ?: "Fallo al validar con Firebase")
+                }
+            }
+        }
+    } catch (e: Exception) {
+        // Esto atrapa si el usuario cierra la ventanita de Google sin elegir cuenta
+        onError("Inicio de sesión cancelado o fallido.")
     }
 }

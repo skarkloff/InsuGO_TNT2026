@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -27,7 +28,6 @@ private val AmbarClaroH = Color(0xFFFAEEDA)
 private val AmbarOscuroH = Color(0xFF854F0B)
 private val AmbarTextoH = Color(0xFF412402)
 private val Gris200H = Color(0xFFD3D1C7)
-private val Gris400H = Color(0xFF888780)
 private val Gris600H = Color(0xFF5F5E5A)
 private val Gris900H = Color(0xFF2C2C2A)
 private val FondoH = Color(0xFFF1EFE8)
@@ -56,7 +56,7 @@ fun HomeScreen(
             ) {
                 Column {
                     Text("Buen día", color = Color.White.copy(alpha = 0.9f), fontSize = 16.sp)
-                    Text("Luis", color = Color.White, fontSize = 26.sp, fontWeight = FontWeight.Medium)
+                    Text("Patricio", color = Color.White, fontSize = 26.sp, fontWeight = FontWeight.Medium)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(
@@ -77,7 +77,7 @@ fun HomeScreen(
                             .background(NaranjaH),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("L", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                        Text("P", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Medium)
                     }
                 }
             }
@@ -88,7 +88,7 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    "Trelew · 9°C · Viento 65 km/h",
+                    "Trelew · 9°C · Viento 65 km/h", // Renderizado nativo simple
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
                     color = Color.White,
                     fontSize = 15.sp
@@ -104,7 +104,7 @@ fun HomeScreen(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Última glucemia
+            // Última glucemia (Actualmente estático, luego lo conectaremos a su propio HomeViewModel)
             Surface(
                 shape = RoundedCornerShape(16.dp),
                 color = VerdeClaroH,
@@ -149,7 +149,7 @@ fun HomeScreen(
                     onClick = onIrAComida,
                     modifier = Modifier.weight(1f).height(100.dp),
                     shape = RoundedCornerShape(14.dp),
-                    border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.5.dp),
+                    border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(width = 1.5.dp),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = NaranjaOscuroH)
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -159,7 +159,7 @@ fun HomeScreen(
                                 .border(2.5.dp, NaranjaOscuroH, RoundedCornerShape(6.dp))
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("Comida y movimiento", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                        Text("Comida y movimiento", fontSize = 16.sp, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center)
                     }
                 }
             }
@@ -192,7 +192,7 @@ fun HomeScreen(
                     .clickable { onIrAHistorial() },
                 shape = RoundedCornerShape(14.dp),
                 color = Color.White,
-                border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp)
+                border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(width = 1.dp)
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp).fillMaxWidth(),

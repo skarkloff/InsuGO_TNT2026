@@ -4,103 +4,52 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.health.insugo.presentation.ui.AcercaDeScreen
-import com.health.insugo.presentation.ui.ComidaScreen
-import com.health.insugo.presentation.ui.CompartirScreen
-import com.health.insugo.presentation.ui.ConsejosScreen
-import com.health.insugo.presentation.ui.GlucosaScreen
-import com.health.insugo.presentation.ui.HistorialScreen
-import com.health.insugo.presentation.ui.HomeScreen
-import com.health.insugo.presentation.ui.LoginScreen
-import com.health.insugo.presentation.ui.PerfilInicialScreen
-
-object Rutas {
-    const val LOGIN = "login"
-    const val PERFIL = "perfil"
-    const val HOME = "home"
-    const val GLUCOSA = "glucosa"
-    const val COMIDA = "comida"
-    const val CONSEJOS = "consejos"
-    const val HISTORIAL = "historial"
-    const val COMPARTIR = "compartir"
-    const val ACERCA = "acerca"
-}
+import com.health.insugo.presentation.ui.*
 
 @Composable
 fun InsuGoNavGraph() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Rutas.LOGIN) {
+    // Establecemos HOME como la pantalla inicial del flujo
+    NavHost(navController = navController, startDestination = "HOME") {
 
-        composable(Rutas.LOGIN) {
-            LoginScreen(
-                onLoginExitoso = {
-                    navController.navigate(Rutas.HOME) {
-                        popUpTo(Rutas.LOGIN) { inclusive = true }
-                    }
-                },
-                onIrARegistro = { navController.navigate(Rutas.PERFIL) }
-            )
-        }
-
-        composable(Rutas.PERFIL) {
-            PerfilInicialScreen(
-                onContinuar = {
-                    navController.navigate(Rutas.HOME) {
-                        popUpTo(Rutas.LOGIN) { inclusive = true }
-                    }
-                },
-                onVolver = { navController.popBackStack() }
-            )
-        }
-
-        composable(Rutas.HOME) {
+        composable("HOME") {
             HomeScreen(
-                onIrAGlucosa = { navController.navigate(Rutas.GLUCOSA) },
-                onIrAComida = { navController.navigate(Rutas.COMIDA) },
-                onIrAConsejos = { navController.navigate(Rutas.CONSEJOS) },
-                onIrAHistorial = { navController.navigate(Rutas.HISTORIAL) },
-                onIrAAcerca = { navController.navigate(Rutas.ACERCA) }
+                onIrAGlucosa = { navController.navigate("GLUCOSA") },
+                onIrAComida = { navController.navigate("COMIDA") },
+                onIrAConsejos = { navController.navigate("CONSEJOS") },
+                onIrAHistorial = { navController.navigate("HISTORIAL") },
+                onIrAAcerca = { navController.navigate("ACERCA") }
             )
         }
 
-        composable(Rutas.GLUCOSA) {
+        composable("GLUCOSA") {
             GlucosaScreen(
                 onGuardar = { navController.popBackStack() },
                 onVolver = { navController.popBackStack() }
             )
         }
-
-        composable(Rutas.COMIDA) {
+        // Declaraciones reales con todos sus parámetros obligatorios asignados
+        composable(route = "COMIDA") {
             ComidaScreen(
                 onGuardar = { navController.popBackStack() },
-                onVolver = { navController.popBackStack() }
+                onVolver = { navController.popBackStack() } // Agregamos el parámetro que faltaba
             )
         }
 
-        composable(Rutas.CONSEJOS) {
-            ConsejosScreen(
-                onVolver = { navController.popBackStack() }
-            )
+        composable(route = "CONSEJOS") {
+            ConsejosScreen(onVolver = { navController.popBackStack() })
         }
 
-        composable(Rutas.HISTORIAL) {
+        composable(route = "HISTORIAL") {
             HistorialScreen(
-                onCompartir = { navController.navigate(Rutas.COMPARTIR) },
-                onVolver = { navController.popBackStack() }
+                onVolver = { navController.popBackStack() },
+                onCompartir = { navController.navigate("COMPARTIR") }
             )
         }
 
-        composable(Rutas.COMPARTIR) {
-            CompartirScreen(
-                onVolver = { navController.popBackStack() }
-            )
-        }
-
-        composable(Rutas.ACERCA) {
-            AcercaDeScreen(
-                onVolver = { navController.popBackStack() }
-            )
+        composable(route = "ACERCA") {
+            AcercaDeScreen(onVolver = { navController.popBackStack() })
         }
     }
 }
