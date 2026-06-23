@@ -21,7 +21,8 @@ class PerfilRepositoryFirebaseImpl(
         return try {
             val datos = hashMapOf(
                 "nombre" to perfil.nombre,
-                "diagnostico" to perfil.diagnostico
+                "diagnostico" to perfil.diagnostico,
+                "ubicacionActivada" to perfil.ubicacionActivada
             )
             firestore.collection("usuarios").document(userId)
                 .set(datos, SetOptions.merge())
@@ -52,10 +53,11 @@ class PerfilRepositoryFirebaseImpl(
 
                 val nombre = snapshot?.getString("nombre")
                 val diagnostico = snapshot?.getString("diagnostico")
+                val ubicacionActivada = snapshot?.getBoolean("ubicacionActivada") ?: false
 
                 trySend(
                     if (nombre != null && diagnostico != null) {
-                        Perfil(nombre = nombre, diagnostico = diagnostico)
+                        Perfil(nombre = nombre, diagnostico = diagnostico, ubicacionActivada = ubicacionActivada)
                     } else {
                         null
                     }

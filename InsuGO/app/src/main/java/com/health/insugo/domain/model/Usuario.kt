@@ -4,5 +4,6 @@ package com.health.insugo.domain.model
 data class Usuario(
     val id: String,
     val nombre: String,
-    val email: String
+    val email: String,
+    val esCuentaGoogle: Boolean = false
 )

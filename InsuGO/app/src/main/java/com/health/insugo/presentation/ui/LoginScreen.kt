@@ -37,7 +37,7 @@ private val Gris900 = Color(0xFF2C2C2A)
 @Composable
 fun LoginScreen(
     onLoginExitoso: () -> Unit,
-    onRegistroExitoso: () -> Unit,
+    onIrARegistro: () -> Unit,
     // 🔌 Inyectamos el ViewModel automáticamente con Koin
     viewModel: AuthViewModel = koinViewModel()
 ) {
@@ -96,8 +96,9 @@ fun LoginScreen(
             OutlinedTextField(
                 value = usuario,
                 onValueChange = { usuario = it; errorMsg = null },
-                label = { Text("Correo o DNI") },
+                label = { Text("Correo electrónico") },
                 placeholder = { Text("tucorreo@ejemplo.com") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
@@ -169,9 +170,12 @@ fun LoginScreen(
 
             OutlinedButton(
                 onClick = {
+                    errorMsg = null
+                    isLoading = true
                     // 🚀 Levantamos el cartelito de Google en una corrutina
                     coroutineScope.launch {
-                        iniciarConGoogle(context, viewModel, onLoginExitoso) { error ->
+                        iniciarConGoogle(context, viewModel, { isLoading = false; onLoginExitoso() }) { error ->
+                            isLoading = false
                             errorMsg = error
                         }
                     }
@@ -183,36 +187,25 @@ fun LoginScreen(
                 border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.5.dp),
                 enabled = !isLoading
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(22.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFF4285F4)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("G", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                if (isLoading) {
+                    CircularProgressIndicator(color = Gris600, modifier = Modifier.size(22.dp))
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(22.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF4285F4)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("G", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text("Continuar con Google", fontSize = 16.sp, color = Gris900)
                 }
-                Spacer(modifier = Modifier.width(12.dp))
-                Text("Continuar con Google", fontSize = 16.sp, color = Gris900)
             }
 
             TextButton(
-                onClick = {
-                    if (usuario.isNotBlank() && password.isNotBlank()) {
-                        isLoading = true
-                        errorMsg = null
-                        viewModel.registrarse(usuario, password) { exito, error ->
-                            isLoading = false
-                            if (exito) {
-                                onRegistroExitoso()
-                            } else {
-                                errorMsg = error ?: "No se pudo crear la cuenta"
-                            }
-                        }
-                    } else {
-                        errorMsg = "Completá correo y contraseña para registrarte"
-                    }
-                },
+                onClick = onIrARegistro,
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading
             ) {
@@ -259,7 +252,9 @@ private suspend fun iniciarConGoogle(
             }
         }
     } catch (e: Exception) {
-        // Esto atrapa si el usuario cierra la ventanita de Google sin elegir cuenta
-        onError("Inicio de sesión cancelado o fallido.")
+        // Esto atrapa, por ejemplo, si el usuario cierra la ventanita de Google sin elegir
+        // cuenta. Mostramos el mensaje real (no uno genérico) para poder diagnosticar
+        // problemas de configuración como un SHA-1 no registrado en Firebase.
+        onError(e.message ?: "Inicio de sesión cancelado o fallido.")
     }
 }

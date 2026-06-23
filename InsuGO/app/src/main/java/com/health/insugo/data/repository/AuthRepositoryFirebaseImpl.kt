@@ -20,7 +20,8 @@ class AuthRepositoryFirebaseImpl(
             Usuario(
                 id = it.uid,
                 nombre = it.displayName ?: "Usuario",
-                email = it.email ?: ""
+                email = it.email ?: "",
+                esCuentaGoogle = it.providerData.any { info -> info.providerId == GoogleAuthProvider.PROVIDER_ID }
             )
         }
     }

@@ -68,7 +68,12 @@ fun PerfilScreen(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            SeccionCuenta(correoActual = usuario?.email ?: "", authViewModel = authViewModel, context = context)
+            SeccionCuenta(
+                correoActual = usuario?.email ?: "",
+                esCuentaGoogle = usuario?.esCuentaGoogle ?: false,
+                authViewModel = authViewModel,
+                context = context
+            )
 
             SeccionDatosDeSalud(
                 nombre = nombre,
@@ -88,7 +93,12 @@ fun PerfilScreen(
 }
 
 @Composable
-private fun SeccionCuenta(correoActual: String, authViewModel: AuthViewModel, context: android.content.Context) {
+private fun SeccionCuenta(
+    correoActual: String,
+    esCuentaGoogle: Boolean,
+    authViewModel: AuthViewModel,
+    context: android.content.Context
+) {
     var mostrarCambioCorreo by remember { mutableStateOf(false) }
     var mostrarCambioClave by remember { mutableStateOf(false) }
 
@@ -105,8 +115,10 @@ private fun SeccionCuenta(correoActual: String, authViewModel: AuthViewModel, co
                     Text("Correo", fontSize = 13.sp, color = Gris600Pf)
                     Text(correoActual, fontSize = 16.sp, color = Gris900Pf)
                 }
-                TextButton(onClick = { mostrarCambioCorreo = !mostrarCambioCorreo }) {
-                    Text(if (mostrarCambioCorreo) "Cancelar" else "Cambiar", color = VerdePf)
+                if (!esCuentaGoogle) {
+                    TextButton(onClick = { mostrarCambioCorreo = !mostrarCambioCorreo }) {
+                        Text(if (mostrarCambioCorreo) "Cancelar" else "Cambiar", color = VerdePf)
+                    }
                 }
             }
             if (mostrarCambioCorreo) {
@@ -126,28 +138,35 @@ private fun SeccionCuenta(correoActual: String, authViewModel: AuthViewModel, co
 
             HorizontalDivider(color = Gris200Pf)
 
-            // Contraseña
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column {
-                    Text("Contraseña", fontSize = 13.sp, color = Gris600Pf)
-                    Text("••••••••", fontSize = 16.sp, color = Gris900Pf)
-                }
-                TextButton(onClick = { mostrarCambioClave = !mostrarCambioClave }) {
-                    Text(if (mostrarCambioClave) "Cancelar" else "Cambiar", color = VerdePf)
-                }
-            }
-            if (mostrarCambioClave) {
-                FormularioCambioClave(
-                    authViewModel = authViewModel,
-                    onExito = {
-                        mostrarCambioClave = false
-                        Toast.makeText(context, "Contraseña actualizada", Toast.LENGTH_SHORT).show()
-                    },
-                    onError = { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
+            if (esCuentaGoogle) {
+                Text(
+                    "Esta cuenta usa Google para iniciar sesión. Para cambiar tu correo o contraseña, hacelo desde tu cuenta de Google.",
+                    fontSize = 14.sp, color = Gris600Pf, lineHeight = 20.sp
                 )
+            } else {
+                // Contraseña
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text("Contraseña", fontSize = 13.sp, color = Gris600Pf)
+                        Text("••••••••", fontSize = 16.sp, color = Gris900Pf)
+                    }
+                    TextButton(onClick = { mostrarCambioClave = !mostrarCambioClave }) {
+                        Text(if (mostrarCambioClave) "Cancelar" else "Cambiar", color = VerdePf)
+                    }
+                }
+                if (mostrarCambioClave) {
+                    FormularioCambioClave(
+                        authViewModel = authViewModel,
+                        onExito = {
+                            mostrarCambioClave = false
+                            Toast.makeText(context, "Contraseña actualizada", Toast.LENGTH_SHORT).show()
+                        },
+                        onError = { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
+                    )
+                }
             }
         }
     }

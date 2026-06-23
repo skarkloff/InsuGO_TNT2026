@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import com.health.insugo.presentation.AuthViewModel
 import com.health.insugo.presentation.navigation.InsuGoNavGraph
 import com.health.insugo.presentation.ui.LoginScreen
+import com.health.insugo.presentation.ui.RegistroScreen
 import com.health.insugo.ui.theme.InsuGOTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -49,12 +50,20 @@ fun EnrutadorPrincipal(
     // Observamos en tiempo real si hay un usuario conectado en Firebase
     val usuarioActual by viewModel.usuarioActual.collectAsState()
     var destinoInicial by remember { mutableStateOf("HOME") }
+    var mostrarRegistro by remember { mutableStateOf(false) }
 
     if (usuarioActual == null) {
-        LoginScreen(
-            onLoginExitoso = { destinoInicial = "HOME" },
-            onRegistroExitoso = { destinoInicial = "PERFIL_INICIAL" }
-        )
+        if (mostrarRegistro) {
+            RegistroScreen(
+                onRegistroExitoso = { destinoInicial = "HOME" },
+                onVolver = { mostrarRegistro = false }
+            )
+        } else {
+            LoginScreen(
+                onLoginExitoso = { destinoInicial = "HOME" },
+                onIrARegistro = { mostrarRegistro = true }
+            )
+        }
     } else {
         // 🟢 Hay usuario: ¡Encendemos tu sistema de navegación!
         InsuGoNavGraph(startDestination = destinoInicial)

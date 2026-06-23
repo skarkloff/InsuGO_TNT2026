@@ -12,17 +12,6 @@ fun InsuGoNavGraph(startDestination: String = "HOME") {
 
     NavHost(navController = navController, startDestination = startDestination) {
 
-        composable("PERFIL_INICIAL") {
-            PerfilInicialScreen(
-                onContinuar = {
-                    navController.navigate("HOME") {
-                        popUpTo("PERFIL_INICIAL") { inclusive = true }
-                    }
-                },
-                onVolver = { navController.popBackStack() }
-            )
-        }
-
         composable("HOME") {
             HomeScreen(
                 onIrAGlucosa = { navController.navigate("GLUCOSA") },
