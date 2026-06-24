@@ -171,6 +171,76 @@ fun HistorialScreen(
                 }
             }
 
+            // Tabla de últimas mediciones
+            Surface(
+                shape = RoundedCornerShape(14.dp),
+                color = Color.White,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Últimas mediciones", fontSize = 16.sp, fontWeight = FontWeight.Medium, color = Gris900Hist)
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    if (uiState.mediciones.isEmpty()) {
+                        Text(
+                            "No hay mediciones registradas.",
+                            fontSize = 14.sp,
+                            color = Gris600Hist,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    } else {
+                        // Header de la tabla
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(FondoHist, RoundedCornerShape(8.dp))
+                                .padding(vertical = 8.dp, horizontal = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text("Fecha / Hora", modifier = Modifier.weight(2f), fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = Gris600Hist)
+                            Text("Momento", modifier = Modifier.weight(1.5f), fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = Gris600Hist)
+                            Text("Valor", modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = Gris600Hist, textAlign = androidx.compose.ui.text.style.TextAlign.End)
+                        }
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        // Filas de datos
+                        uiState.mediciones.forEachIndexed { index, medicion ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp, horizontal = 12.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val sdf = java.text.SimpleDateFormat("dd/MM HH:mm", java.util.Locale("es", "ES"))
+                                val fechaFormateada = sdf.format(medicion.fecha)
+                                
+                                Text(fechaFormateada, modifier = Modifier.weight(2f), fontSize = 14.sp, color = Gris900Hist)
+                                Text(medicion.momentoDia, modifier = Modifier.weight(1.5f), fontSize = 14.sp, color = Gris600Hist)
+
+                                val textColor = when {
+                                    medicion.valor >= 170 -> RojoHist
+                                    medicion.valor >= 140 -> Color(0xFFBA7517)
+                                    else -> VerdeHist
+                                }
+                                Text(
+                                    "${medicion.valor} mg/dL",
+                                    modifier = Modifier.weight(1f),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = textColor,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.End
+                                )
+                            }
+                            if (index < uiState.mediciones.size - 1) {
+                                HorizontalDivider(color = Color(0xFFE8E4D6), thickness = 0.5.dp)
+                            }
+                        }
+                    }
+                }
+            }
+
             // Observación
             Surface(
                 shape = RoundedCornerShape(14.dp),

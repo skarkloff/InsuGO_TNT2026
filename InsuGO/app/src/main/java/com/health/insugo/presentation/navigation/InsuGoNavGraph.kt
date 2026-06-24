@@ -52,6 +52,12 @@ fun InsuGoNavGraph(startDestination: String = "HOME") {
             )
         }
 
+        composable(route = "COMPARTIR") {
+            CompartirScreen(
+                onVolver = { navController.popBackStack() }
+            )
+        }
+
         composable(route = "ACERCA") {
             AcercaDeScreen(onVolver = { navController.popBackStack() })
         }

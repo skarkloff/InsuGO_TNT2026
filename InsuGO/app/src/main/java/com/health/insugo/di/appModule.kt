@@ -13,6 +13,8 @@ import com.health.insugo.domain.repository.PerfilRepository
 import com.health.insugo.presentation.AuthViewModel
 import com.health.insugo.presentation.viewmodel.ComidaViewModel
 import com.health.insugo.presentation.viewmodel.GlucosaViewModel
+import com.health.insugo.presentation.export.PdfExporter
+import com.health.insugo.presentation.export.AndroidPdfExporter
 import com.health.insugo.presentation.viewmodel.HistorialViewModel
 import com.health.insugo.presentation.viewmodel.HomeViewModel
 import com.health.insugo.presentation.viewmodel.PerfilViewModel
@@ -41,12 +43,13 @@ val appModule = module {
     single<AuthRepository> { AuthRepositoryFirebaseImpl(firebaseAuth = get()) }
     single<ComidaRepository> { ComidaRepositoryFirebaseImpl(firestore = get(), auth = get()) }
     single<PerfilRepository> { PerfilRepositoryFirebaseImpl(firestore = get(), auth = get()) }
+    single<PdfExporter> { AndroidPdfExporter() }
 
     // 3. Registramos el ViewModel inyectándole el repositorio
     viewModel { AuthViewModel(authRepository = get<AuthRepository>()) }
     viewModel { GlucosaViewModel(repository = get()) }
     viewModel { ComidaViewModel(repository = get()) }
     viewModel { PerfilViewModel(repository = get()) }
-    viewModel { HistorialViewModel(repository = get()) }
+    viewModel { HistorialViewModel(repository = get(), perfilRepository = get(), pdfExporter = get()) }
     viewModel { HomeViewModel(repository = get(), perfilRepository = get()) }
 }

@@ -9,32 +9,34 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.health.insugo.presentation.viewmodel.HistorialViewModel
+import org.koin.androidx.compose.koinViewModel
 
 private val VerdeComp = Color(0xFF1D9E75)
 private val RojoComp = Color(0xFFE24B4A)
-private val Gris200Comp = Color(0xFFD3D1C7)
 private val Gris600Comp = Color(0xFF5F5E5A)
 private val Gris900Comp = Color(0xFF2C2C2A)
 private val FondoComp = Color(0xFFF1EFE8)
 private val WhatsApp = Color(0xFF25D366)
 
-private val barrasComp = listOf(0.50f, 0.75f, 0.45f, 0.60f, 0.90f, 0.55f, 0.50f)
-private val coloresComp = listOf(
-    Color(0xFF1D9E75), Color(0xFFBA7517), Color(0xFF1D9E75),
-    Color(0xFF1D9E75), Color(0xFFE24B4A), Color(0xFF1D9E75), Color(0xFF1D9E75)
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompartirScreen(
-    onVolver: () -> Unit
+    onVolver: () -> Unit,
+    viewModel: HistorialViewModel = koinViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -78,18 +80,23 @@ fun CompartirScreen(
                         color = Gris600Comp,
                         letterSpacing = androidx.compose.ui.unit.TextUnit(0.5f, androidx.compose.ui.unit.TextUnitType.Sp)
                     )
-                    Text("Luis · 12 al 18 de abril", fontSize = 18.sp, fontWeight = FontWeight.Medium, color = Gris900Comp)
+                    Text(
+                        "${uiState.nombre.ifBlank { "Paciente" }} · Últimos 7 días",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Gris900Comp
+                    )
 
                     HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE8E4D6))
 
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text("Promedio glucemia", fontSize = 12.sp, color = Gris600Comp)
-                            Text("124 mg/dL", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Gris900Comp)
+                            Text("${uiState.promedio} mg/dL", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Gris900Comp)
                         }
                         Column(modifier = Modifier.weight(1f)) {
                             Text("Mediciones", fontSize = 12.sp, color = Gris600Comp)
-                            Text("12", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Gris900Comp)
+                            Text("${uiState.totalMediciones}", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Gris900Comp)
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
@@ -106,7 +113,7 @@ fun CompartirScreen(
 
                     Spacer(modifier = Modifier.height(14.dp))
 
-                    // Mini gráfico
+                    // Mini gráfico dinámico
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -116,12 +123,17 @@ fun CompartirScreen(
                         verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        barrasComp.forEachIndexed { i, altura ->
+                        uiState.barras.forEach { barra ->
+                            val color = when {
+                                barra.altura >= 0.85f -> RojoComp
+                                barra.altura >= 0.70f -> Color(0xFFBA7517)
+                                else -> VerdeComp
+                            }
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .fillMaxHeight(altura)
-                                    .background(coloresComp[i], RoundedCornerShape(2.dp))
+                                    .fillMaxHeight(barra.altura)
+                                    .background(color, RoundedCornerShape(2.dp))
                             )
                         }
                     }
@@ -132,7 +144,7 @@ fun CompartirScreen(
 
             // Opciones de compartir
             Button(
-                onClick = { /* WhatsApp — próximamente */ },
+                onClick = { viewModel.compartirPorWhatsApp(context) },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = WhatsApp)
@@ -147,7 +159,7 @@ fun CompartirScreen(
             }
 
             OutlinedButton(
-                onClick = { /* PDF — próximamente */ },
+                onClick = { viewModel.exportarACompPDF(context) },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
